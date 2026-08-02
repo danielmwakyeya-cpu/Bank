@@ -314,6 +314,7 @@
         <input type="password" id="loginPassword" required autocomplete="current-password">
       </div>
       <button type="submit" class="btn btn-primary" id="loginBtn">Sign In</button>
+      <button type="button" class="btn-text" style="width:100%; text-align:center; margin-top:10px;" onclick="handleForgotPassword()">Forgot password?</button>
     </form>
 
     <form id="signupForm" class="hidden">
@@ -614,7 +615,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
   import {
-    getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+    getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail,
     onAuthStateChanged, signOut, updateProfile
   } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
   import {
@@ -701,16 +702,24 @@
     e.preventDefault();
     const btn = $('signupBtn');
     btn.disabled = true; btn.textContent = 'Creating account...';
+    const name = $('signupName').value.trim();
+    const email = $('signupEmail').value.trim();
+
     try {
-      const cred = await createUserWithEmailAndPassword(auth, $('signupEmail').value.trim(), $('signupPassword').value);
-      await updateProfile(cred.user, { displayName: $('signupName').value.trim() });
-      await setDoc(doc(db, 'users', cred.user.uid), {
-        name: $('signupName').value.trim(),
-        email: $('signupEmail').value.trim(),
-        groupId: null,
-        role: null,
-        createdAt: serverTimestamp()
-      });
+      const cred = await createUserWithEmailAndPassword(auth, email, $('signupPassword').value);
+      // Account creation itself succeeded from here on — don't show the
+      // user a scary error for anything after this point. If the profile
+      // document write below fails (e.g. a brief permissions propagation
+      // delay right after signup), loadUserAndGroup() will self-heal it
+      // automatically once onAuthStateChanged picks up the new session.
+      try {
+        await updateProfile(cred.user, { displayName: name });
+        await setDoc(doc(db, 'users', cred.user.uid), {
+          name, email, groupId: null, role: null, createdAt: serverTimestamp()
+        });
+      } catch(profileErr){
+        console.warn('Profile setup will self-heal on next load:', profileErr);
+      }
     } catch(err){
       showAuthError(friendlyAuthError(err));
     }
@@ -731,6 +740,23 @@
     if(code.includes('user-not-found')) return 'No account found with that email.';
     return 'Something went wrong. Please try again.';
   }
+
+  window.handleForgotPassword = async function(){
+    const email = $('loginEmail').value.trim();
+    if(!email){
+      showAuthError('Enter your email above first, then tap "Forgot password?" again.');
+      $('loginEmail').focus();
+      return;
+    }
+    try {
+      await sendPasswordResetEmail(auth, email);
+      showAuthError('');
+      $('authError').classList.remove('show');
+      showToast(`Password reset email sent to ${email} — check your inbox.`);
+    } catch(err){
+      showAuthError(friendlyAuthError(err));
+    }
+  };
 
   window.signOutUser = async function(){
     await signOut(auth);
@@ -856,8 +882,30 @@
 
   // ---------- LOAD USER + GROUP ----------
   async function loadUserAndGroup(){
-    const userSnap = await getDoc(doc(db, 'users', currentUser.uid));
-    if(!userSnap.exists()) return;
+    let userSnap = await getDoc(doc(db, 'users', currentUser.uid));
+
+    if(!userSnap.exists()){
+      // The Auth account exists but its profile document doesn't — this can
+      // happen if the signup flow got interrupted right after account
+      // creation (a brief Firestore permissions propagation delay is a known
+      // Firebase quirk). Recreate the profile from the Auth account instead
+      // of leaving the user stuck.
+      try {
+        await setDoc(doc(db, 'users', currentUser.uid), {
+          name: currentUser.displayName || 'Member',
+          email: currentUser.email || '',
+          groupId: null,
+          role: null,
+          createdAt: serverTimestamp()
+        });
+        userSnap = await getDoc(doc(db, 'users', currentUser.uid));
+      } catch(err){
+        showToast('Could not load your profile. Please try refreshing.');
+        screen('screen-auth');
+        return;
+      }
+    }
+
     currentUserDoc = userSnap.data();
 
     if(!currentUserDoc.groupId){
