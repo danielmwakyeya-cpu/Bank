@@ -120,6 +120,19 @@
   }
   .member-row-input input{flex:1;}
   .remove-member{background:none; border:none; color:var(--rust); font-size:1.2rem; padding:4px 8px; flex-shrink:0;}
+  .pay-options{display:flex; flex-direction:column; gap:8px;}
+  .pay-opt{
+    display:flex; align-items:center; gap:10px; padding:12px 14px; border:1.5px solid rgba(27,67,50,0.18);
+    border-radius:12px; cursor:pointer; font-size:0.88rem; background:#fff; transition:all 0.2s ease;
+  }
+  .pay-opt input{accent-color:var(--gold); width:16px; height:16px; flex-shrink:0;}
+  .pay-opt.selected{border-color:var(--gold); background:rgba(201,154,63,0.08);}
+  .calc-preview{
+    background:var(--gold-pale); border-radius:14px; padding:14px 16px; margin-bottom:18px;
+  }
+  .calc-row{display:flex; justify-content:space-between; font-size:0.85rem; padding:5px 0;}
+  .calc-row span:first-child{color:var(--ink-soft);}
+  .calc-row span:last-child{font-family:var(--mono); font-weight:600; color:var(--forest-deep);}
 
   /* ---------- APP SHELL ---------- */
   .app-shell{min-height:100vh; padding-bottom:88px;}
@@ -199,6 +212,17 @@
   .wheel-status .whose-turn{font-family:var(--serif); font-size:1.2rem; color:var(--forest); font-weight:600;}
   .wheel-status .turn-label{font-size:0.78rem; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;}
 
+  .progress-block{margin-bottom:20px;}
+  .progress-label{display:flex; justify-content:space-between; font-size:0.78rem; color:var(--ink-soft); margin-bottom:8px;}
+  .progress-label span:first-child{font-weight:600; color:var(--forest);}
+  .progress-track{
+    height:12px; border-radius:20px; background:rgba(27,67,50,0.1); overflow:hidden;
+    box-shadow:inset 0 1px 3px rgba(15,46,34,0.1);
+  }
+  .progress-fill{
+    height:100%; background:linear-gradient(90deg, var(--gold), var(--forest-soft)); border-radius:20px;
+    transition:width 0.5s cubic-bezier(.2,.8,.2,1);
+  }
   .summary-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;}
   .summary-card{background:#fff; border-radius:16px; padding:16px 18px; box-shadow:0 6px 16px rgba(27,67,50,0.06);}
   .summary-card .label{font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-soft); margin-bottom:6px;}
@@ -252,6 +276,21 @@
   .ledger-amount.in{color:var(--forest-soft);}
   .ledger-amount.out{color:var(--gold); }
   .ledger-card{background:#fff; border-radius:16px; padding:6px 18px; box-shadow:0 4px 12px rgba(27,67,50,0.05);}
+  .upcoming-item{
+    display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid rgba(27,67,50,0.08);
+  }
+  .upcoming-item:last-child{border-bottom:none;}
+  .upcoming-date{
+    width:46px; height:46px; border-radius:12px; background:var(--parchment-deep); flex-shrink:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; line-height:1.1;
+  }
+  .upcoming-date.overdue{background:rgba(166,67,46,0.15);}
+  .upcoming-date .u-day{font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--forest-deep);}
+  .upcoming-date.overdue .u-day{color:var(--rust);}
+  .upcoming-date .u-mon{font-size:0.62rem; text-transform:uppercase; color:var(--ink-soft); letter-spacing:0.04em;}
+  .upcoming-info .u-title{font-weight:600; font-size:0.88rem;}
+  .upcoming-info .u-sub{font-size:0.76rem; color:var(--ink-soft); margin-top:1px;}
+  .upcoming-info .u-sub.overdue{color:var(--rust); font-weight:600;}
 
   /* ---------- EMPTY STATES ---------- */
   .empty-state{text-align:center; padding:50px 20px; color:var(--ink-soft);}
@@ -324,6 +363,25 @@
   .loan-balance{font-family:var(--mono); font-weight:600; font-size:1.05rem; margin-top:6px;}
   .loan-actions{display:flex; gap:8px; margin-top:10px;}
   .loan-actions .btn{padding:9px 14px; font-size:0.8rem; width:auto; flex:1;}
+
+  /* ---------- MONEY TABLE ---------- */
+  .money-row{
+    display:flex; align-items:center; gap:12px; background:#fff; border-radius:14px; padding:14px 16px;
+    margin-bottom:10px; box-shadow:0 4px 12px rgba(27,67,50,0.05);
+  }
+  .money-row .mr-pos{
+    width:32px; height:32px; border-radius:50%; background:var(--parchment-deep); flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:0.78rem;
+    font-weight:600; color:var(--forest-deep);
+  }
+  .money-row .mr-info{flex:1; min-width:0;}
+  .money-row .mr-name{font-weight:600; font-size:0.9rem;}
+  .money-row .mr-breakdown{font-size:0.74rem; color:var(--ink-soft); margin-top:2px;}
+  .money-row .mr-net{font-family:var(--mono); font-weight:700; font-size:0.92rem; text-align:right; flex-shrink:0;}
+  .money-row .mr-net.positive{color:var(--forest-soft);}
+  .money-row .mr-net.negative{color:var(--rust);}
+  .money-row .mr-net.zero{color:var(--ink-soft);}
+  .money-row .mr-net-label{display:block; font-size:0.62rem; text-transform:uppercase; letter-spacing:0.04em; font-weight:600; color:var(--ink-soft); text-align:right;}
 
   /* ---------- CONSTITUTION ---------- */
   .constitution-item{
@@ -452,9 +510,25 @@
         </select>
       </div>
       <div class="field">
-        <label>Members, in payout order</label>
+        <label>Members</label>
         <div id="memberInputList"></div>
         <button type="button" class="btn btn-outline" style="margin-top:6px;" onclick="addMemberRow()">+ Add Member</button>
+      </div>
+      <div class="calc-preview" id="setupCalcPreview">
+        <div class="calc-row"><span>Pot per round</span><span id="calcPot">—</span></div>
+        <div class="calc-row"><span>Full cycle length</span><span id="calcCycleLength">—</span></div>
+        <div class="calc-row"><span>Each member pays, per full cycle</span><span id="calcTotalPaid">—</span></div>
+      </div>
+      <div class="field">
+        <label>Payout Order</label>
+        <div class="pay-options">
+          <label class="pay-opt selected" onclick="setOrderMode(this,'manual')">
+            <input type="radio" name="orderMode" value="manual" checked> Keep the order I typed them in
+          </label>
+          <label class="pay-opt" onclick="setOrderMode(this,'random')">
+            <input type="radio" name="orderMode" value="random"> Shuffle randomly
+          </label>
+        </div>
       </div>
       <button type="submit" class="btn btn-primary" id="createGroupBtn" style="margin-top:10px;">Create Circle</button>
       <button type="button" class="btn btn-text" style="width:100%; text-align:center; margin-top:8px;" onclick="backToChoice()">← Back</button>
@@ -524,6 +598,13 @@
         <div class="whose-turn" id="currentTurnName">—</div>
       </div>
     </div>
+    <div class="progress-block">
+      <div class="progress-label">
+        <span>Cycle Progress</span>
+        <span id="progressCount">0 of 0 paid out</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%;"></div></div>
+    </div>
     <div class="summary-grid">
       <div class="summary-card">
         <div class="label">Circle Pot / Round</div>
@@ -538,6 +619,8 @@
       <div class="label">Your Status This Round</div>
       <div class="value" id="myStatusValue" style="font-size:1rem;">—</div>
     </div>
+    <div class="section-label">Upcoming</div>
+    <div class="ledger-card" id="upcomingList" style="margin-bottom:20px;"></div>
     <div class="section-label" style="display:flex; justify-content:space-between; align-items:center;">
       <span>Recent Activity</span>
       <button class="btn-text" style="padding:0;" onclick="shareViaWhatsApp()">Share via WhatsApp</button>
@@ -566,6 +649,7 @@
     <div class="filter-tabs">
       <button class="filter-tab active" data-tab="transactions" onclick="setLedgerTab('transactions')">Transactions</button>
       <button class="filter-tab" data-tab="loans" onclick="setLedgerTab('loans')">Loans</button>
+      <button class="filter-tab" data-tab="money" onclick="setLedgerTab('money')">Money</button>
     </div>
     <div id="ledgerTabTransactions">
       <div class="section-label" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
@@ -580,6 +664,23 @@
     <div id="ledgerTabLoans" class="hidden">
       <div class="section-label">Active &amp; Past Loans</div>
       <div id="loansList"></div>
+    </div>
+    <div id="ledgerTabMoney" class="hidden">
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="label">Total Pot Moved</div>
+          <div class="value num" id="statTotalMoved">—</div>
+        </div>
+        <div class="summary-card gold">
+          <div class="label">Outstanding Loans</div>
+          <div class="value num" id="statOutstandingLoans">—</div>
+        </div>
+      </div>
+      <div class="section-label">Every Member's Position</div>
+      <p style="font-size:0.8rem; color:var(--ink-soft); margin-bottom:12px;">
+        What each person has paid in versus received so far this cycle. Early recipients run a deficit until their turn comes — that's normal, not a problem.
+      </p>
+      <div id="moneyTable"></div>
     </div>
   </div>
 
@@ -616,6 +717,10 @@
         <div class="field">
           <label for="loanDueDate">Due Date</label>
           <input type="date" id="loanDueDate" required>
+        </div>
+        <div class="calc-preview" id="loanCalcPreview">
+          <div class="calc-row"><span>Fee amount</span><span id="calcLoanFee">—</span></div>
+          <div class="calc-row"><span>Total to repay</span><span id="calcLoanTotal">—</span></div>
         </div>
         <button type="submit" class="btn btn-primary">Issue Loan</button>
       </form>
@@ -796,6 +901,18 @@
     for(let i=0;i<5;i++){ code += chars[Math.floor(Math.random()*chars.length)]; }
     return code;
   }
+  function shuffleArray(arr){
+    for(let i = arr.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+  window.setOrderMode = function(el, mode){
+    document.querySelectorAll('#createGroupForm .pay-opt').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    el.querySelector('input').checked = true;
+  };
   function screen(id){
     document.querySelectorAll('.auth-screen, .app-shell').forEach(el => el.classList.add('hidden'));
     $(id).classList.remove('hidden');
@@ -914,6 +1031,7 @@
       addMemberRow();
       addMemberRow();
     }
+    updateSetupCalc();
   };
   window.showJoinGroup = function(){
     screen('screen-join-group');
@@ -930,11 +1048,35 @@
       <button type="button" class="remove-member" onclick="this.parentElement.remove(); renumberMembers();" aria-label="Remove">&times;</button>
     `;
     $('memberInputList').appendChild(wrap);
+    updateSetupCalc();
   };
   window.renumberMembers = function(){
     const rows = $('memberInputList').querySelectorAll('.member-row-input');
     rows.forEach((row, i) => { row.querySelector('.pos').textContent = i + 1; });
+    updateSetupCalc();
   };
+
+  const FREQUENCY_WEEKS = { Weekly: 1, Fortnightly: 2, Monthly: 4.345 };
+  function updateSetupCalc(){
+    const memberCount = document.querySelectorAll('.member-name-input').length;
+    const amount = parseFloat($('contributionAmount').value) || 0;
+    const currency = $('currency').value;
+    const frequency = $('frequency').value;
+
+    const pot = amount * memberCount;
+    $('calcPot').textContent = memberCount > 0 ? fmtMoney(pot, currency) : '—';
+
+    const weeksPerRound = FREQUENCY_WEEKS[frequency] || 1;
+    const totalWeeks = Math.round(weeksPerRound * memberCount);
+    $('calcCycleLength').textContent = memberCount > 0 ? `~${totalWeeks} weeks (${memberCount} rounds)` : '—';
+
+    const totalPaid = amount * memberCount;
+    $('calcTotalPaid').textContent = memberCount > 0 ? fmtMoney(totalPaid, currency) : '—';
+  }
+  $('contributionAmount').addEventListener('input', updateSetupCalc);
+  $('currency').addEventListener('change', updateSetupCalc);
+  $('frequency').addEventListener('change', updateSetupCalc);
+  $('memberInputList').addEventListener('input', updateSetupCalc);
 
   $('createGroupForm').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -951,6 +1093,9 @@
       return;
     }
 
+    const orderMode = document.querySelector('input[name="orderMode"]:checked').value;
+    const orderedNames = orderMode === 'random' ? shuffleArray([...names]) : names;
+
     btn.disabled = true; btn.textContent = 'Creating...';
     try {
       const groupRef = await addDoc(collection(db, 'groups'), {
@@ -966,11 +1111,11 @@
         status: 'active'
       });
 
-      for(let i = 0; i < names.length; i++){
+      for(let i = 0; i < orderedNames.length; i++){
         await addDoc(collection(db, 'groups', groupRef.id, 'members'), {
-          name: names[i],
+          name: orderedNames[i],
           position: i + 1,
-          uid: names[i] === currentUserDoc.name ? currentUser.uid : null,
+          uid: orderedNames[i] === currentUserDoc.name ? currentUser.uid : null,
           hasReceivedPayout: false,
           totalContributed: 0,
           joinedAt: serverTimestamp()
@@ -1369,6 +1514,7 @@
       renderMembersList();
       renderDashboardStats();
       renderContributeView();
+      renderMoneyTable();
     });
   }
 
@@ -1379,6 +1525,7 @@
       currentTransactions = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       renderLedger();
       renderRecentActivity();
+      renderUpcoming();
     });
   }
 
@@ -1436,8 +1583,18 @@
       if(m.hasReceivedPayout){ posClass = 'paid'; badgeClass = 'paid'; badgeText = 'Paid Out'; }
       if(i === currentIdx){ posClass = 'current'; badgeClass = 'current'; badgeText = 'Current Turn'; }
       const safeName = escapeHtml(m.name).replace(/'/g, "\\'");
+      const canMoveUp = !m.hasReceivedPayout && i > 0 && !currentMembers[i-1].hasReceivedPayout;
+      const canMoveDown = !m.hasReceivedPayout && i < currentMembers.length - 1 && !currentMembers[i+1].hasReceivedPayout;
       const actions = treasurer ? `
         <div class="member-actions">
+          ${!m.hasReceivedPayout ? `
+            <button ${canMoveUp ? '' : 'disabled style="opacity:0.25;"'} onclick="moveMemberUp(${i})" aria-label="Move ${escapeHtml(m.name)} up">
+              <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+            </button>
+            <button ${canMoveDown ? '' : 'disabled style="opacity:0.25;"'} onclick="moveMemberDown(${i})" aria-label="Move ${escapeHtml(m.name)} down">
+              <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+          ` : ''}
           <button onclick="editMemberName('${m.id}','${safeName}')" aria-label="Edit ${escapeHtml(m.name)}">
             <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
           </button>
@@ -1504,11 +1661,49 @@
     }
   };
 
+  window.moveMemberUp = async function(index){
+    if(blockIfArchived()) return;
+    const above = currentMembers[index - 1];
+    const me = currentMembers[index];
+    if(!above || !me || above.hasReceivedPayout || me.hasReceivedPayout) return;
+    try {
+      const batch = writeBatch(db);
+      batch.update(doc(db, 'groups', currentGroupId, 'members', me.id), { position: above.position });
+      batch.update(doc(db, 'groups', currentGroupId, 'members', above.id), { position: me.position });
+      await batch.commit();
+      showToast(`${me.name} moved up`);
+    } catch(err){
+      showToast('Could not change position. Try again.');
+    }
+  };
+
+  window.moveMemberDown = async function(index){
+    if(blockIfArchived()) return;
+    const below = currentMembers[index + 1];
+    const me = currentMembers[index];
+    if(!below || !me || below.hasReceivedPayout || me.hasReceivedPayout) return;
+    try {
+      const batch = writeBatch(db);
+      batch.update(doc(db, 'groups', currentGroupId, 'members', me.id), { position: below.position });
+      batch.update(doc(db, 'groups', currentGroupId, 'members', below.id), { position: me.position });
+      await batch.commit();
+      showToast(`${me.name} moved down`);
+    } catch(err){
+      showToast('Could not change position. Try again.');
+    }
+  };
+
   // ---------- DASHBOARD STATS ----------
   function renderDashboardStats(){
     const pot = (currentGroup.contributionAmount || 0) * currentMembers.length;
     $('statPot').textContent = fmtMoney(pot);
     $('statRound').textContent = `${currentGroup.currentRound || 1} of ${currentMembers.length}`;
+
+    const paidCount = currentMembers.filter(m => m.hasReceivedPayout).length;
+    const total = currentMembers.length;
+    const pct = total > 0 ? Math.round((paidCount / total) * 100) : 0;
+    $('progressFill').style.width = pct + '%';
+    $('progressCount').textContent = `${paidCount} of ${total} paid out`;
 
     const me = currentMembers.find(m => m.uid === currentUser.uid);
     const currentIdx = currentMembers.findIndex(m => !m.hasReceivedPayout);
@@ -1539,6 +1734,86 @@
     }
     container.innerHTML = recent.map(txRow).join('');
   }
+
+  // ---------- UPCOMING (calendar-style timeline) ----------
+  // Combines active loan due dates with an estimated next-contribution date
+  // (based on frequency + the last recorded activity) into one sorted list.
+  // The contribution date is a soft estimate, not an authoritative deadline —
+  // this app doesn't track explicit per-round due dates, only the pattern.
+  function renderUpcoming(){
+    const container = $('upcomingList');
+    if(!container || !currentGroup) return;
+
+    const items = [];
+    const freqDays = { Weekly: 7, Fortnightly: 14, Monthly: 30 };
+    const days = freqDays[currentGroup.frequency] || 14;
+
+    if(currentGroup.status !== 'archived' && currentMembers.length > 0){
+      let baseDate = null;
+      if(currentTransactions.length > 0 && currentTransactions[0].date && currentTransactions[0].date.toDate){
+        baseDate = currentTransactions[0].date.toDate();
+      } else if(currentGroup.createdAt && currentGroup.createdAt.toDate){
+        baseDate = currentGroup.createdAt.toDate();
+      }
+      if(baseDate){
+        // Project the next few rounds, tied to whichever members haven't
+        // been paid out yet — not just a generic "next payment" date, but
+        // whose turn it actually lands on, based on the circle's frequency.
+        const pot = (currentGroup.contributionAmount || 0) * currentMembers.length;
+        const startRound = currentGroup.currentRound || 1;
+        const unpaid = currentMembers.filter(m => !m.hasReceivedPayout);
+        unpaid.slice(0, 3).forEach((m, i) => {
+          const projectedDate = new Date(baseDate.getTime() + (i + 1) * days * 24 * 60 * 60 * 1000);
+          items.push({
+            date: projectedDate,
+            title: i === 0 ? `${m.name}'s turn — contributions due` : `${m.name}'s turn (projected)`,
+            sub: `Round ~${startRound + i} · ${fmtMoney(pot)} pot`
+          });
+        });
+      }
+    }
+
+    currentLoans.filter(l => l.status === 'active' && l.dueDate).forEach(l => {
+      items.push({
+        date: new Date(l.dueDate),
+        title: `Loan repayment — ${l.memberName}`,
+        sub: fmtMoney(l.balance)
+      });
+    });
+
+    items.sort((a, b) => a.date - b.date);
+    const top = items.slice(0, 5);
+
+    if(top.length === 0){
+      container.innerHTML = emptyState('Nothing upcoming right now.');
+      return;
+    }
+
+    const now = new Date();
+    container.innerHTML = top.map(item => {
+      const overdue = item.date < now;
+      const day = item.date.getDate();
+      const mon = item.date.toLocaleDateString('en-GB', { month: 'short' });
+      const daysDiff = Math.round((item.date - now) / (24 * 60 * 60 * 1000));
+      let subText;
+      if(overdue){ subText = `Overdue by ${Math.abs(daysDiff)} day${Math.abs(daysDiff) === 1 ? '' : 's'}`; }
+      else if(daysDiff === 0){ subText = 'Due today'; }
+      else { subText = `In ${daysDiff} day${daysDiff === 1 ? '' : 's'}`; }
+      return `
+        <div class="upcoming-item">
+          <div class="upcoming-date ${overdue ? 'overdue' : ''}">
+            <div class="u-day">${day}</div>
+            <div class="u-mon">${mon}</div>
+          </div>
+          <div class="upcoming-info">
+            <div class="u-title">${escapeHtml(item.title)}</div>
+            <div class="u-sub ${overdue ? 'overdue' : ''}">${subText} · ${escapeHtml(item.sub)}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
   function txRow(tx){
     const isPayout = tx.type === 'payout';
     const dateStr = tx.date && tx.date.toDate ? tx.date.toDate().toLocaleDateString('en-GB', { day:'numeric', month:'short' }) : '';
@@ -1683,6 +1958,8 @@
     unsubLoans = onSnapshot(q, (snap) => {
       currentLoans = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       renderLoans();
+      renderUpcoming();
+      renderMoneyTable();
     });
   }
 
@@ -1719,15 +1996,72 @@
     }).join('');
   }
 
+  // ---------- MONEY TABLE (per-member analytics) ----------
+  // Everything here comes from real, already-tracked data — no fabricated
+  // stats. Received = the pot size if that member has been paid out this
+  // cycle, else 0. Net = received minus contributed so far. Over a full
+  // cycle every member's net returns to roughly zero; mid-cycle, early
+  // recipients run a deficit until it's their turn — that's the honest
+  // mechanics of a rotating pot, made visible instead of hidden.
+  function renderMoneyTable(){
+    const moneyTab = $('ledgerTabMoney');
+    if(!moneyTab || moneyTab.classList.contains('hidden')) return;
+    if(!currentGroup || currentMembers.length === 0) return;
+
+    const pot = (currentGroup.contributionAmount || 0) * currentMembers.length;
+    const totalMoved = currentTransactions.reduce((sum, t) => sum + (t.amount || 0), 0);
+    const outstandingLoans = currentLoans
+      .filter(l => l.status === 'active')
+      .reduce((sum, l) => sum + (l.balance || 0), 0);
+
+    $('statTotalMoved').textContent = fmtMoney(totalMoved);
+    $('statOutstandingLoans').textContent = fmtMoney(outstandingLoans);
+
+    const container = $('moneyTable');
+    container.innerHTML = currentMembers.map(m => {
+      const contributed = m.totalContributed || 0;
+      const received = m.hasReceivedPayout ? pot : 0;
+      const net = received - contributed;
+      const netClass = net > 0 ? 'positive' : (net < 0 ? 'negative' : 'zero');
+      const netSign = net > 0 ? '+' : '';
+      return `
+        <div class="money-row">
+          <div class="mr-pos">${m.position}</div>
+          <div class="mr-info">
+            <div class="mr-name">${escapeHtml(m.name)}</div>
+            <div class="mr-breakdown">Paid in ${fmtMoney(contributed)} · Received ${fmtMoney(received)}</div>
+          </div>
+          <div>
+            <span class="mr-net-label">Net</span>
+            <div class="mr-net ${netClass}">${netSign}${fmtMoney(net)}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
   window.setLedgerTab = function(tab){
     document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
     document.querySelector(`.filter-tab[data-tab="${tab}"]`).classList.add('active');
     $('ledgerTabTransactions').classList.toggle('hidden', tab !== 'transactions');
     $('ledgerTabLoans').classList.toggle('hidden', tab !== 'loans');
+    $('ledgerTabMoney').classList.toggle('hidden', tab !== 'money');
+    if(tab === 'money'){ renderMoneyTable(); }
   };
 
   const issueLoanFormEl = $('issueLoanForm');
   if(issueLoanFormEl){
+    function updateLoanCalc(){
+      const amount = parseFloat($('loanAmount').value) || 0;
+      const feeRate = parseFloat($('loanFee').value) || 0;
+      const feeAmount = amount * feeRate / 100;
+      const total = amount + feeAmount;
+      $('calcLoanFee').textContent = amount > 0 ? fmtMoney(feeAmount) : '—';
+      $('calcLoanTotal').textContent = amount > 0 ? fmtMoney(total) : '—';
+    }
+    $('loanAmount').addEventListener('input', updateLoanCalc);
+    $('loanFee').addEventListener('input', updateLoanCalc);
+
     issueLoanFormEl.addEventListener('submit', async (e) => {
       e.preventDefault();
       if(blockIfArchived()) return;
@@ -1747,6 +2081,7 @@
         });
         e.target.reset();
         $('loanFee').value = 10;
+        updateLoanCalc();
         showToast(`Loan issued to ${member.name}`);
       } catch(err){
         showToast('Could not issue loan. Try again.');
