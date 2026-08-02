@@ -691,7 +691,11 @@
     const btn = $('loginBtn');
     btn.disabled = true; btn.textContent = 'Signing in...';
     try {
-      await signInWithEmailAndPassword(auth, $('loginEmail').value.trim(), $('loginPassword').value);
+      const cred = await signInWithEmailAndPassword(auth, $('loginEmail').value.trim(), $('loginPassword').value);
+      btn.textContent = 'Signed in — loading...';
+      currentUser = cred.user;
+      await loadUserAndGroup();
+      return;
     } catch(err){
       showAuthError(friendlyAuthError(err));
     }
@@ -711,7 +715,7 @@
       // user a scary error for anything after this point. If the profile
       // document write below fails (e.g. a brief permissions propagation
       // delay right after signup), loadUserAndGroup() will self-heal it
-      // automatically once onAuthStateChanged picks up the new session.
+      // automatically.
       try {
         await updateProfile(cred.user, { displayName: name });
         await setDoc(doc(db, 'users', cred.user.uid), {
@@ -720,6 +724,11 @@
       } catch(profileErr){
         console.warn('Profile setup will self-heal on next load:', profileErr);
       }
+      btn.textContent = 'Account created — loading...';
+      currentUser = cred.user;
+      await loadUserAndGroup();
+      // Don't reset the button — the screen has switched away from this form by now.
+      return;
     } catch(err){
       showAuthError(friendlyAuthError(err));
     }
