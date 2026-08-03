@@ -25,7 +25,8 @@
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Dancing+Script:wght@600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Dancing+Script:wght@600&display=swap"></noscript>
 <style>
   :root{
     --forest:#1B4332; --forest-deep:#0F2E22; --forest-soft:#2D6A4F;
@@ -33,13 +34,28 @@
     --parchment:#F4F0E4; --parchment-deep:#EAE3D2;
     --ink:#1F2B24; --ink-soft:#4A554D;
     --rust:#A6432E; --rust-soft:#C97A67;
+    --card-bg:#FFFFFF; --text-heading:#0F2E22;
     --serif:'Spectral', serif; --sans:'IBM Plex Sans', sans-serif; --mono:'IBM Plex Mono', monospace;
+    --signature:'Dancing Script', cursive;
   }
+  [data-theme="dark"]{
+    --forest:#2D6A4F; --forest-deep:#1B4332; --forest-soft:#40916C;
+    --gold:#D4AC5C; --gold-light:#E8C878; --gold-pale:#2E2517;
+    --parchment:#161D19; --parchment-deep:#0E1512;
+    --ink:#EDEAE0; --ink-soft:#9CA69D;
+    --rust:#D97757; --rust-soft:#C97A67;
+    --card-bg:#212A25; --text-heading:#F0DFAE;
+  }
+  [data-theme="dark"] .empty-state svg{stroke:var(--forest-soft);}
+  [data-theme="dark"] .auth-card{box-shadow:0 24px 60px rgba(0,0,0,0.5);}
+  [data-theme="dark"] .field input, [data-theme="dark"] .field select{border-color:rgba(237,234,224,0.15);}
+  [data-theme="dark"] .choice-card{background:var(--card-bg); border-color:rgba(237,234,224,0.15);}
+  [data-theme="dark"] .filter-tab{background:var(--card-bg); border-color:rgba(237,234,224,0.2);}
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
   body{
     font-family:var(--sans); color:var(--ink); background:var(--parchment);
-    line-height:1.6; min-height:100vh;
+    line-height:1.6; min-height:100vh; transition:background 0.3s ease, color 0.3s ease;
   }
   @media (prefers-reduced-motion: reduce){
     *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
@@ -47,7 +63,7 @@
   a{color:inherit; text-decoration:none;}
   button{font-family:inherit; cursor:pointer;}
   input, select{font-family:inherit;}
-  h1,h2,h3{font-family:var(--serif); font-weight:600; color:var(--forest-deep);}
+  h1,h2,h3{font-family:var(--serif); font-weight:600; color:var(--text-heading);}
   .num{font-family:var(--mono); font-variant-numeric:tabular-nums;}
   a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible{
     outline:2px solid var(--gold); outline-offset:2px;
@@ -64,6 +80,8 @@
   .btn-primary{background:var(--forest); color:var(--parchment);}
   .btn-primary:hover{background:var(--forest-deep); transform:translateY(-1px);}
   .btn-gold{background:var(--gold); color:var(--forest-deep);}
+  .btn-whatsapp{background:#25D366; color:#fff; display:flex; align-items:center; justify-content:center;}
+  .btn-whatsapp:hover{background:#1DA851;}
   .btn-gold:hover{background:var(--gold-light);}
   .btn-outline{background:transparent; color:var(--forest); border:1.5px solid var(--forest);}
   .btn-outline:hover{background:rgba(27,67,50,0.06);}
@@ -74,6 +92,7 @@
   .auth-screen{
     min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
     padding:40px 20px; background:linear-gradient(180deg, var(--forest) 0%, var(--forest-deep) 100%);
+    position:relative;
   }
   .auth-card{
     background:var(--parchment); border-radius:24px; padding:40px 30px; max-width:400px; width:100%;
@@ -90,7 +109,7 @@
   }
   .field input, .field select{
     width:100%; padding:13px 14px; border:1.5px solid rgba(27,67,50,0.18); border-radius:10px;
-    font-size:0.95rem; background:#fff; color:var(--ink);
+    font-size:0.95rem; background:var(--card-bg); color:var(--ink);
   }
   .field input:focus, .field select:focus{border-color:var(--gold);}
   .field-error{color:var(--rust); font-size:0.78rem; margin-top:5px; min-height:1em;}
@@ -105,7 +124,7 @@
   .onboard-choice{display:flex; flex-direction:column; gap:14px; margin-top:8px;}
   .choice-card{
     border:1.5px solid rgba(27,67,50,0.18); border-radius:16px; padding:20px; text-align:left;
-    background:#fff; transition:all 0.2s ease;
+    background:var(--card-bg); transition:all 0.2s ease;
   }
   .choice-card:hover{border-color:var(--gold); transform:translateY(-2px);}
   .choice-card h3{font-size:1.05rem; margin-bottom:4px;}
@@ -123,7 +142,7 @@
   .pay-options{display:flex; flex-direction:column; gap:8px;}
   .pay-opt{
     display:flex; align-items:center; gap:10px; padding:12px 14px; border:1.5px solid rgba(27,67,50,0.18);
-    border-radius:12px; cursor:pointer; font-size:0.88rem; background:#fff; transition:all 0.2s ease;
+    border-radius:12px; cursor:pointer; font-size:0.88rem; background:var(--card-bg); transition:all 0.2s ease;
   }
   .pay-opt input{accent-color:var(--gold); width:16px; height:16px; flex-shrink:0;}
   .pay-opt.selected{border-color:var(--gold); background:rgba(201,154,63,0.08);}
@@ -132,7 +151,7 @@
   }
   .calc-row{display:flex; justify-content:space-between; font-size:0.85rem; padding:5px 0;}
   .calc-row span:first-child{color:var(--ink-soft);}
-  .calc-row span:last-child{font-family:var(--mono); font-weight:600; color:var(--forest-deep);}
+  .calc-row span:last-child{font-family:var(--mono); font-weight:600; color:var(--text-heading);}
 
   /* ---------- APP SHELL ---------- */
   .app-shell{min-height:100vh; padding-bottom:88px;}
@@ -154,6 +173,7 @@
     display:flex; align-items:center; justify-content:center; color:var(--parchment); flex-shrink:0;
   }
   .icon-btn svg{width:18px; height:18px; stroke:currentColor; stroke-width:1.8; fill:none;}
+  .lang-toggle{font-family:var(--sans); font-weight:700; font-size:0.68rem; letter-spacing:0.02em; cursor:pointer; border:none;}
 
   /* ---------- CIRCLE SWITCHER ---------- */
   .switcher-drawer{
@@ -183,8 +203,22 @@
   .switcher-item .si-meta{font-size:0.76rem; color:var(--ink-soft); margin-top:2px;}
   .switcher-item .si-check{color:var(--gold); font-size:1.1rem;}
 
+  .treasurer-item{
+    display:flex; align-items:center; gap:12px; background:var(--card-bg); border-radius:14px; padding:14px 16px;
+    margin-bottom:10px; box-shadow:0 4px 12px rgba(27,67,50,0.05);
+  }
+  .treasurer-item .ti-badge{
+    width:36px; height:36px; border-radius:50%; background:var(--gold-pale); color:var(--text-heading);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .treasurer-item .ti-badge svg{width:17px; height:17px; stroke:currentColor; stroke-width:1.8; fill:none;}
+  .treasurer-item .ti-info{flex:1;}
+  .treasurer-item .ti-name{font-weight:600; font-size:0.9rem;}
+  .treasurer-item .ti-meta{font-size:0.74rem; color:var(--ink-soft); margin-top:1px;}
+  .treasurer-item .ti-remove{background:none; border:none; color:var(--rust); font-size:0.78rem; font-weight:600; padding:6px 10px;}
+
   .bottom-nav{
-    position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid rgba(27,67,50,0.1);
+    position:fixed; bottom:0; left:0; right:0; background:var(--card-bg); border-top:1px solid rgba(27,67,50,0.1);
     display:flex; justify-content:space-around; padding:8px 4px calc(8px + env(safe-area-inset-bottom));
     z-index:50; max-width:520px; margin:0 auto;
   }
@@ -202,11 +236,11 @@
 
   /* ---------- THE WHEEL ---------- */
   .wheel-card{
-    background:#fff; border-radius:24px; padding:28px 20px; text-align:center; margin-bottom:20px;
+    background:var(--card-bg); border-radius:24px; padding:28px 20px; text-align:center; margin-bottom:20px;
     box-shadow:0 8px 24px rgba(27,67,50,0.08);
   }
   .wheel-svg{width:100%; max-width:280px; margin:0 auto; display:block;}
-  .wheel-center-label{font-family:var(--serif); font-size:0.85rem; font-weight:600; fill:var(--forest-deep);}
+  .wheel-center-label{font-family:var(--serif); font-size:0.85rem; font-weight:600; fill:var(--text-heading);}
   .wheel-center-sub{font-family:var(--sans); font-size:0.6rem; fill:var(--ink-soft);}
   .wheel-status{margin-top:16px;}
   .wheel-status .whose-turn{font-family:var(--serif); font-size:1.2rem; color:var(--forest); font-weight:600;}
@@ -224,19 +258,25 @@
     transition:width 0.5s cubic-bezier(.2,.8,.2,1);
   }
   .summary-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;}
-  .summary-card{background:#fff; border-radius:16px; padding:16px 18px; box-shadow:0 6px 16px rgba(27,67,50,0.06);}
+  .summary-card{background:var(--card-bg); border-radius:16px; padding:16px 18px; box-shadow:0 6px 16px rgba(27,67,50,0.06);}
   .summary-card .label{font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-soft); margin-bottom:6px;}
-  .summary-card .value{font-family:var(--mono); font-size:1.3rem; font-weight:600; color:var(--forest-deep);}
+  .summary-card .value{font-family:var(--mono); font-size:1.3rem; font-weight:600; color:var(--text-heading);}
   .summary-card.gold{background:var(--gold-pale);}
 
   .section-label{
     font-size:0.75rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--forest-soft);
     font-weight:600; margin-bottom:12px;
   }
+  .search-input{
+    width:100%; padding:12px 16px; border:1.5px solid rgba(27,67,50,0.18); border-radius:24px;
+    font-size:0.9rem; background:var(--card-bg); color:var(--ink); margin-bottom:16px;
+  }
+  [data-theme="dark"] .search-input{border-color:rgba(237,234,224,0.15);}
+  .search-input:focus{border-color:var(--gold);}
 
   /* ---------- MEMBERS LIST ---------- */
   .member-item{
-    display:flex; align-items:center; gap:14px; background:#fff; border-radius:16px; padding:14px 16px;
+    display:flex; align-items:center; gap:14px; background:var(--card-bg); border-radius:16px; padding:14px 16px;
     margin-bottom:10px; box-shadow:0 4px 12px rgba(27,67,50,0.05);
   }
   .member-pos{
@@ -275,7 +315,7 @@
   .ledger-amount{font-family:var(--mono); font-weight:600; font-size:0.95rem;}
   .ledger-amount.in{color:var(--forest-soft);}
   .ledger-amount.out{color:var(--gold); }
-  .ledger-card{background:#fff; border-radius:16px; padding:6px 18px; box-shadow:0 4px 12px rgba(27,67,50,0.05);}
+  .ledger-card{background:var(--card-bg); border-radius:16px; padding:6px 18px; box-shadow:0 4px 12px rgba(27,67,50,0.05);}
   .upcoming-item{
     display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid rgba(27,67,50,0.08);
   }
@@ -285,7 +325,7 @@
     display:flex; flex-direction:column; align-items:center; justify-content:center; line-height:1.1;
   }
   .upcoming-date.overdue{background:rgba(166,67,46,0.15);}
-  .upcoming-date .u-day{font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--forest-deep);}
+  .upcoming-date .u-day{font-family:var(--mono); font-weight:700; font-size:1rem; color:var(--text-heading);}
   .upcoming-date.overdue .u-day{color:var(--rust);}
   .upcoming-date .u-mon{font-size:0.62rem; text-transform:uppercase; color:var(--ink-soft); letter-spacing:0.04em;}
   .upcoming-info .u-title{font-weight:600; font-size:0.88rem;}
@@ -319,8 +359,19 @@
     background:var(--gold-pale); border:1.5px dashed var(--gold); border-radius:14px; padding:16px;
     text-align:center; margin:16px 0;
   }
-  .invite-code-box .code{font-family:var(--mono); font-size:1.4rem; font-weight:700; letter-spacing:0.1em; color:var(--forest-deep);}
+  .invite-code-box .code{font-family:var(--mono); font-size:1.4rem; font-weight:700; letter-spacing:0.1em; color:var(--text-heading);}
   .invite-code-box .hint{font-size:0.76rem; color:var(--ink-soft); margin-top:4px;}
+  .studio-credit{
+    text-align:center; margin-top:22px; padding-top:18px; border-top:1px solid rgba(27,67,50,0.1);
+    font-size:0.72rem; color:var(--ink-soft);
+  }
+  .studio-credit .signature{
+    font-family:var(--signature); font-size:1.05rem; color:var(--forest-soft); margin-top:2px;
+    transition:color 0.2s ease;
+  }
+  .studio-credit:hover .signature{color:var(--gold);}
+  [data-theme="dark"] .studio-credit{border-top-color:rgba(237,234,224,0.12);}
+
   .danger-zone{
     margin-top:24px; padding:16px 18px; border:1.5px solid rgba(166,67,46,0.3); border-radius:14px;
     background:rgba(166,67,46,0.05);
@@ -332,6 +383,17 @@
   .archived-banner{
     background:var(--rust); color:#fff; text-align:center; padding:10px 20px; font-size:0.8rem; font-weight:600;
   }
+  .nudge-banner{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    background:var(--gold-pale); border:1.5px solid var(--gold); border-radius:14px;
+    padding:14px 16px; margin-bottom:18px;
+  }
+  .nudge-banner.urgent{background:rgba(166,67,46,0.1); border-color:var(--rust);}
+  .nudge-banner .nb-text{font-size:0.84rem; color:var(--text-heading); flex:1;}
+  .nudge-banner .nb-btn{
+    background:var(--forest); color:var(--parchment); border:none; border-radius:20px;
+    padding:9px 16px; font-size:0.78rem; font-weight:600; flex-shrink:0; cursor:pointer;
+  }
   .loading-spinner{
     width:28px; height:28px; border:3px solid rgba(27,67,50,0.15); border-top-color:var(--forest);
     border-radius:50%; animation:spin 0.8s linear infinite; margin:40px auto;
@@ -341,14 +403,14 @@
   /* ---------- TABS ---------- */
   .filter-tabs{display:flex; gap:8px; margin-bottom:18px;}
   .filter-tab{
-    padding:9px 18px; border-radius:20px; border:1.5px solid rgba(27,67,50,0.2); background:#fff;
+    padding:9px 18px; border-radius:20px; border:1.5px solid rgba(27,67,50,0.2); background:var(--card-bg);
     font-size:0.82rem; font-weight:600; color:var(--forest-soft);
   }
   .filter-tab.active{background:var(--forest); color:var(--parchment); border-color:var(--forest);}
 
   /* ---------- LOANS ---------- */
   .loan-card{
-    background:#fff; border-radius:16px; padding:16px 18px; margin-bottom:12px;
+    background:var(--card-bg); border-radius:16px; padding:16px 18px; margin-bottom:12px;
     box-shadow:0 4px 12px rgba(27,67,50,0.05);
   }
   .loan-card .loan-top{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;}
@@ -366,13 +428,15 @@
 
   /* ---------- MONEY TABLE ---------- */
   .money-row{
-    display:flex; align-items:center; gap:12px; background:#fff; border-radius:14px; padding:14px 16px;
+    display:flex; align-items:center; gap:12px; background:var(--card-bg); border-radius:14px; padding:14px 16px;
     margin-bottom:10px; box-shadow:0 4px 12px rgba(27,67,50,0.05);
   }
+  .clickable{cursor:pointer; transition:opacity 0.15s ease;}
+  .clickable:hover{opacity:0.75;}
   .money-row .mr-pos{
     width:32px; height:32px; border-radius:50%; background:var(--parchment-deep); flex-shrink:0;
     display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:0.78rem;
-    font-weight:600; color:var(--forest-deep);
+    font-weight:600; color:var(--text-heading);
   }
   .money-row .mr-info{flex:1; min-width:0;}
   .money-row .mr-name{font-weight:600; font-size:0.9rem;}
@@ -385,7 +449,7 @@
 
   /* ---------- CONSTITUTION ---------- */
   .constitution-item{
-    background:#fff; border-radius:14px; padding:14px 16px; margin-bottom:10px;
+    background:var(--card-bg); border-radius:14px; padding:14px 16px; margin-bottom:10px;
     box-shadow:0 4px 12px rgba(27,67,50,0.05); border-left:3px solid var(--forest-soft);
   }
   .constitution-item.penalty{border-left-color:var(--rust);}
@@ -409,48 +473,54 @@
 
 <!-- ================= AUTH ================= -->
 <div id="screen-auth" class="auth-screen hidden">
+  <button class="lang-toggle" style="position:absolute; top:20px; right:20px; background:rgba(255,255,255,0.15); color:var(--parchment); border-radius:50%; width:38px; height:38px;" onclick="toggleLanguage()" aria-label="Switch language">NY</button>
   <div class="auth-card">
     <div class="brand-mark">
       <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="none" stroke="#1B4332" stroke-width="3"/><circle cx="32" cy="32" r="19" fill="none" stroke="#C99A3F" stroke-width="2.5"/><circle cx="32" cy="9" r="5" fill="#1B4332"/><circle cx="53" cy="45" r="3.5" fill="#C99A3F"/><circle cx="11" cy="45" r="3.5" fill="#C99A3F"/></svg>
       <h1>Bank Nkhonde</h1>
-      <p>Every member sees the same ledger, always</p>
+      <p data-i18n="tagline">Every member sees the same ledger, always</p>
     </div>
 
     <div id="authError" class="auth-error"></div>
 
     <form id="loginForm">
       <div class="field">
-        <label for="loginEmail">Email</label>
+        <label for="loginEmail" data-i18n="email">Email</label>
         <input type="email" id="loginEmail" required autocomplete="email">
       </div>
       <div class="field">
-        <label for="loginPassword">Password</label>
+        <label for="loginPassword" data-i18n="password">Password</label>
         <input type="password" id="loginPassword" required autocomplete="current-password">
       </div>
-      <button type="submit" class="btn btn-primary" id="loginBtn">Sign In</button>
-      <button type="button" class="btn-text" style="width:100%; text-align:center; margin-top:10px;" onclick="handleForgotPassword()">Forgot password?</button>
+      <button type="submit" class="btn btn-primary" id="loginBtn" data-i18n="signIn">Sign In</button>
+      <button type="button" class="btn-text" style="width:100%; text-align:center; margin-top:10px;" onclick="handleForgotPassword()" data-i18n="forgotPassword">Forgot password?</button>
     </form>
 
     <form id="signupForm" class="hidden">
       <div class="field">
-        <label for="signupName">Your Name</label>
+        <label for="signupName" data-i18n="yourName">Your Name</label>
         <input type="text" id="signupName" required autocomplete="name">
       </div>
       <div class="field">
-        <label for="signupEmail">Email</label>
+        <label for="signupEmail" data-i18n="email">Email</label>
         <input type="email" id="signupEmail" required autocomplete="email">
       </div>
       <div class="field">
-        <label for="signupPassword">Password</label>
+        <label for="signupPassword" data-i18n="password">Password</label>
         <input type="password" id="signupPassword" required minlength="6" autocomplete="new-password">
         <div class="field-error">At least 6 characters</div>
       </div>
-      <button type="submit" class="btn btn-primary" id="signupBtn">Create Account</button>
+      <button type="submit" class="btn btn-primary" id="signupBtn" data-i18n="createAccount">Create Account</button>
     </form>
 
     <div class="auth-toggle">
-      <span id="toggleToSignup">New here? <button type="button" class="btn-text" onclick="showSignup()">Create an account</button></span>
-      <span id="toggleToLogin" class="hidden">Already have an account? <button type="button" class="btn-text" onclick="showLogin()">Sign in</button></span>
+      <span id="toggleToSignup"><span data-i18n="newHere">New here?</span> <button type="button" class="btn-text" onclick="showSignup()" data-i18n="createAnAccount">Create an account</button></span>
+      <span id="toggleToLogin" class="hidden"><span data-i18n="alreadyHaveAccount">Already have an account?</span> <button type="button" class="btn-text" onclick="showLogin()" data-i18n="signInLink">Sign in</button></span>
+    </div>
+
+    <div class="studio-credit">
+      Built by Rogue Codings
+      <div class="signature">Daniel Mwakyeya</div>
     </div>
   </div>
 </div>
@@ -460,16 +530,16 @@
   <div class="auth-card">
     <div class="brand-mark">
       <h1 style="font-size:1.3rem;">Welcome, <span id="welcomeName"></span></h1>
-      <p>Let's get you into a savings circle</p>
+      <p data-i18n="welcomeSub">Let's get you into a savings circle</p>
     </div>
     <div class="onboard-choice">
       <button class="choice-card" onclick="showCreateGroup()">
-        <h3>Start a new circle</h3>
-        <p>Set up the member list, contribution amount, and payout order</p>
+        <h3 data-i18n="startNewCircle">Start a new circle</h3>
+        <p data-i18n="startNewCircleDesc">Set up the member list, contribution amount, and payout order</p>
       </button>
       <button class="choice-card" onclick="showJoinGroup()">
-        <h3>Join with a code</h3>
-        <p>Someone in your circle shared an invite code with you</p>
+        <h3 data-i18n="joinWithCode">Join with a code</h3>
+        <p data-i18n="joinWithCodeDesc">Someone in your circle shared an invite code with you</p>
       </button>
     </div>
   </div>
@@ -571,6 +641,16 @@
   <button class="btn btn-outline" style="margin:14px 18px 18px; width:calc(100% - 36px);" onclick="closeSwitcher(); backToChoice(); screen('screen-onboard-choice');">+ Join or Start Another Circle</button>
 </div>
 
+<!-- ================= MEMBER DETAIL DRAWER ================= -->
+<div class="switcher-backdrop" id="memberDetailBackdrop" onclick="closeMemberDetail()"></div>
+<div id="memberDetailDrawer" class="switcher-drawer">
+  <div class="switcher-head">
+    <h3 id="memberDetailName">—</h3>
+    <button class="drawer-close" onclick="closeMemberDetail()" aria-label="Close">&times;</button>
+  </div>
+  <div id="memberDetailBody" style="padding:0 18px 18px;"></div>
+</div>
+
 <!-- ================= MAIN APP SHELL ================= -->
 <div id="screen-app" class="app-shell hidden">
   <div class="app-header">
@@ -582,6 +662,11 @@
         </div>
         <svg viewBox="0 0 24 24" class="switch-chevron"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
+      <button class="icon-btn" onclick="toggleTheme()" aria-label="Toggle dark mode" id="themeToggleBtn">
+        <svg viewBox="0 0 24 24" id="themeIconSun"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="4.9" y1="4.9" x2="6.3" y2="6.3"/><line x1="17.7" y1="17.7" x2="19.1" y2="19.1"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="4.9" y1="19.1" x2="6.3" y2="17.7"/><line x1="17.7" y1="6.3" x2="19.1" y2="4.9"/></svg>
+        <svg viewBox="0 0 24 24" id="themeIconMoon" class="hidden"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>
+      </button>
+      <button class="icon-btn lang-toggle" onclick="toggleLanguage()" aria-label="Switch language">NY</button>
       <button class="icon-btn" onclick="showView('profile')" aria-label="Profile">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
       </button>
@@ -591,6 +676,7 @@
 
   <!-- DASHBOARD -->
   <div id="view-dashboard" class="view active">
+    <div id="nudgeBanner" class="nudge-banner hidden"></div>
     <div class="wheel-card">
       <svg id="wheelSvg" class="wheel-svg" viewBox="0 0 280 280"></svg>
       <div class="wheel-status">
@@ -630,6 +716,7 @@
 
   <!-- MEMBERS -->
   <div id="view-members" class="view">
+    <input type="text" id="memberSearchInput" class="search-input" placeholder="Search members..." oninput="renderMembersList()">
     <div class="section-label">Payout Order</div>
     <div id="membersList"></div>
     <div id="manageMembersSection" class="hidden">
@@ -652,6 +739,7 @@
       <button class="filter-tab" data-tab="money" onclick="setLedgerTab('money')">Money</button>
     </div>
     <div id="ledgerTabTransactions">
+      <input type="text" id="ledgerSearchInput" class="search-input" placeholder="Search by member name..." oninput="renderLedger()">
       <div class="section-label" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
         <span>Full Transaction History</span>
         <span>
@@ -749,6 +837,10 @@
       <div class="code" id="profileInviteCode">—</div>
       <div class="hint">Share this code so others can join your circle</div>
     </div>
+    <button class="btn btn-whatsapp" style="margin-bottom:20px;" onclick="shareInviteViaWhatsApp()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right:6px; vertical-align:-3px;"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.29-1.39a9.9 9.9 0 0 0 4.75 1.21h.01c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z"/></svg>
+      Share Invite via WhatsApp
+    </button>
 
     <div id="editSettingsSection" class="hidden">
       <div class="section-label" style="margin-top:24px;">Circle Settings</div>
@@ -782,6 +874,21 @@
           <button type="submit" class="btn btn-outline">Save Changes</button>
         </form>
       </div>
+
+      <div class="section-label" style="margin-top:24px;">Treasurers</div>
+      <p style="font-size:0.82rem; color:var(--ink-soft); margin-bottom:12px;">
+        A second treasurer means no single person holds all the records — either can record activity, and both are accountable.
+      </p>
+      <div id="treasurersList"></div>
+      <div id="addTreasurerSection" class="ledger-card hidden" style="padding:16px 18px; margin-bottom:20px;">
+        <label style="font-size:0.75rem; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; color:var(--forest); margin-bottom:8px; display:block;">Add a Co-Treasurer</label>
+        <div style="display:flex; gap:8px;">
+          <select id="newTreasurerSelect" style="flex:1;"></select>
+          <button class="btn btn-gold" style="width:auto; padding:12px 18px;" onclick="addCoTreasurer()">Add</button>
+        </div>
+        <p style="font-size:0.76rem; color:var(--ink-soft); margin-top:8px;">Only members who've already joined and claimed a position can be made treasurer.</p>
+      </div>
+
       <div class="danger-zone">
         <div class="danger-zone-label" id="dangerZoneLabel">Danger Zone</div>
         <p style="font-size:0.82rem; color:var(--ink-soft); margin-bottom:12px;" id="dangerZoneText">
@@ -790,6 +897,10 @@
         <button class="btn" style="background:var(--rust); color:#fff; width:100%;" id="archiveBtn" onclick="archiveCircle()">Archive This Circle</button>
         <button class="btn btn-gold hidden" style="width:100%;" id="unarchiveBtn" onclick="unarchiveCircle()">Reopen This Circle</button>
       </div>
+    </div>
+
+    <div id="leaveCircleSection" style="margin-top:24px;">
+      <button class="btn btn-outline" style="width:100%; color:var(--rust); border-color:var(--rust);" onclick="leaveCircle()">Leave This Circle</button>
     </div>
 
     <div class="section-label" style="margin-top:24px; display:flex; justify-content:space-between; align-items:center;">
@@ -818,28 +929,33 @@
     <div id="constitutionList"></div>
 
     <button class="btn btn-outline" style="margin-top:24px;" onclick="signOutUser()">Sign Out</button>
+
+    <div class="studio-credit">
+      Built by Rogue Codings
+      <div class="signature">Daniel Mwakyeya</div>
+    </div>
   </div>
 
   <div class="bottom-nav">
     <button class="nav-item active" data-view="dashboard" onclick="showView('dashboard')">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>
-      Circle
+      <span data-i18n="navCircle">Circle</span>
     </button>
     <button class="nav-item" data-view="members" onclick="showView('members')">
       <svg viewBox="0 0 24 24"><circle cx="9" cy="7" r="3"/><path d="M2 21v-1a6 6 0 0 1 6-6h2a6 6 0 0 1 6 6v1"/><circle cx="17" cy="7" r="2.5"/><path d="M17 12c2.5 0 5 1.8 5 5v1"/></svg>
-      Members
+      <span data-i18n="navMembers">Members</span>
     </button>
     <button class="nav-item" data-view="ledger" onclick="showView('ledger')">
       <svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg>
-      Ledger
+      <span data-i18n="navLedger">Ledger</span>
     </button>
     <button class="nav-item" data-view="contribute" id="navContribute" onclick="showView('contribute')">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-      Record
+      <span data-i18n="navRecord">Record</span>
     </button>
     <button class="nav-item" data-view="profile" onclick="showView('profile')">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.2a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.2a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.2a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.2a1.7 1.7 0 0 0-1.5 1z"/></svg>
-      More
+      <span data-i18n="navMore">More</span>
     </button>
   </div>
 </div>
@@ -856,8 +972,114 @@
   import {
     getFirestore, doc, setDoc, getDoc, updateDoc, deleteDoc, collection, addDoc,
     query, where, getDocs, onSnapshot, orderBy, serverTimestamp, increment,
-    arrayUnion, arrayRemove, writeBatch
+    arrayUnion, arrayRemove, writeBatch, enableIndexedDbPersistence
   } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+  // ---------- THEME (applied immediately, before Firebase/auth resolve) ----------
+  function applyTheme(theme){
+    document.documentElement.setAttribute('data-theme', theme);
+    const sun = document.getElementById('themeIconSun');
+    const moon = document.getElementById('themeIconMoon');
+    if(sun && moon){
+      sun.classList.toggle('hidden', theme === 'dark');
+      moon.classList.toggle('hidden', theme !== 'dark');
+    }
+  }
+  window.toggleTheme = function(){
+    const current = document.documentElement.getAttribute('data-theme') || 'light';
+    const next = current === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('nkhonde-theme', next);
+    applyTheme(next);
+  };
+  (function initTheme(){
+    const saved = localStorage.getItem('nkhonde-theme');
+    const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(saved || (systemPrefersDark ? 'dark' : 'light'));
+  })();
+
+  // ---------- LANGUAGE (English / Chichewa) ----------
+  // Covers the app's core chrome — navigation, auth, onboarding, section
+  // labels, and primary buttons. Fully dynamic/generated content (toasts,
+  // per-transaction lines, member-entered names) stays in English for now.
+  // Note: the Chichewa here is a solid first draft, not native-speaker
+  // verified — worth a review by a fluent speaker before treating it as final.
+  const TRANSLATIONS = {
+    en: {
+      tagline: 'Every member sees the same ledger, always',
+      email: 'Email', password: 'Password', yourName: 'Your Name',
+      signIn: 'Sign In', createAccount: 'Create Account', forgotPassword: 'Forgot password?',
+      newHere: 'New here?', createAnAccount: 'Create an account',
+      alreadyHaveAccount: 'Already have an account?', signInLink: 'Sign in',
+      welcomeSub: "Let's get you into a savings circle",
+      startNewCircle: 'Start a new circle',
+      startNewCircleDesc: 'Set up the member list, contribution amount, and payout order',
+      joinWithCode: 'Join with a code',
+      joinWithCodeDesc: 'Someone in your circle shared an invite code with you',
+      navCircle: 'Circle', navMembers: 'Members', navLedger: 'Ledger', navRecord: 'Record', navMore: 'More',
+      currentlyReceiving: 'Currently Receiving', circlePotRound: 'Circle Pot / Round', round: 'Round',
+      yourStatus: 'Your Status This Round', upcoming: 'Upcoming', recentActivity: 'Recent Activity',
+      payoutOrder: 'Payout Order', manageMembers: 'Manage Members',
+      transactions: 'Transactions', loans: 'Loans', money: 'Money', fullTransactionHistory: 'Full Transaction History',
+      markContributions: 'Mark Contributions Received', completePayout: "Complete This Round's Payout",
+      issueLoan: 'Issue a Loan',
+      account: 'Account', inviteOthers: 'Invite Others', treasurers: 'Treasurers',
+      circleSettings: 'Circle Settings', dangerZone: 'Danger Zone', circleRules: 'Circle Rules & Constitution',
+      saveChanges: 'Save Changes', signOut: 'Sign Out', add: 'Add',
+      createCircle: 'Create Circle', findCircle: 'Find Circle',
+      archiveThisCircle: 'Archive This Circle', reopenThisCircle: 'Reopen This Circle',
+      leaveThisCircle: 'Leave This Circle', back: '← Back'
+    },
+    ny: {
+      tagline: 'Membala aliyense amaona zolemba zomwezo, nthawi zonse',
+      email: 'Imelo', password: 'Mawu Achinsinsi', yourName: 'Dzina Lanu',
+      signIn: 'Lowani', createAccount: 'Pangani Akaunti', forgotPassword: 'Mwaiwala mawu achinsinsi?',
+      newHere: 'Ndinu Watsopano?', createAnAccount: 'Pangani akaunti',
+      alreadyHaveAccount: 'Muli ndi akaunti kale?', signInLink: 'Lowani',
+      welcomeSub: 'Tiyeni tikulowetseni mu bwalo la chuma',
+      startNewCircle: 'Yambani Bwalo Latsopano',
+      startNewCircleDesc: 'Ikani mndandanda wa mamembala, ndalama zoyenera kupereka, ndi dongosolo lolandira',
+      joinWithCode: 'Lowani ndi Khodi',
+      joinWithCodeDesc: 'Wina mu bwalo lanu wakupatsani khodi yolowera',
+      navCircle: 'Bwalo', navMembers: 'Mamembala', navLedger: 'Zolemba', navRecord: 'Lembani', navMore: 'Zina',
+      currentlyReceiving: 'Amene Akulandira Tsopano', circlePotRound: 'Ndalama za Gulu / Mpikisano', round: 'Mpikisano',
+      yourStatus: 'Mmene Mulili pa Mpikisanowu', upcoming: 'Zikubwera', recentActivity: 'Zochita Posachedwa',
+      payoutOrder: 'Dongosolo Lolandira', manageMembers: 'Sinthani Mamembala',
+      transactions: 'Zochita', loans: 'Ngongole', money: 'Ndalama', fullTransactionHistory: 'Mbiri Yonse ya Zochita',
+      markContributions: 'Lembani Zopereka Zolandidwa', completePayout: 'Malizani Kulandira kwa Mpikisanowu',
+      issueLoan: 'Perekani Ngongole',
+      account: 'Akaunti', inviteOthers: 'Itanani Ena', treasurers: 'Osunga Ndalama',
+      circleSettings: 'Zokonzekera za Bwalo', dangerZone: 'Malo Owopsa', circleRules: 'Malamulo a Bwalo',
+      saveChanges: 'Sungani Zosintha', signOut: 'Tulukani', add: 'Onjezerani',
+      createCircle: 'Pangani Bwalo', findCircle: 'Fufuzani Bwalo',
+      archiveThisCircle: 'Bisani Bwalolino', reopenThisCircle: 'Tsegulaninso Bwalolino',
+      leaveThisCircle: 'Chokani mu Bwalolino', back: '← Bwererani'
+    }
+  };
+  let currentLang = 'en';
+  function t(key){
+    return (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) || TRANSLATIONS.en[key] || key;
+  }
+  function applyLanguage(lang){
+    currentLang = TRANSLATIONS[lang] ? lang : 'en';
+    document.documentElement.setAttribute('lang', currentLang === 'ny' ? 'ny' : 'en');
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      el.textContent = t(el.getAttribute('data-i18n'));
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      el.setAttribute('placeholder', t(el.getAttribute('data-i18n-placeholder')));
+    });
+    document.querySelectorAll('.lang-toggle').forEach(btn => {
+      btn.textContent = currentLang === 'ny' ? 'EN' : 'NY';
+    });
+  }
+  window.toggleLanguage = function(){
+    const next = currentLang === 'ny' ? 'en' : 'ny';
+    localStorage.setItem('nkhonde-lang', next);
+    applyLanguage(next);
+  };
+  (function initLanguage(){
+    applyLanguage(localStorage.getItem('nkhonde-lang') || 'en');
+  })();
 
   const firebaseConfig = {
     apiKey: "AIzaSyBTtOY1e5HPK5DHoasnnIvjuEFO6Dq20zI",
@@ -871,6 +1093,15 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
+
+  // Offline resilience: cached data stays readable with no connection, and
+  // writes queue locally and sync automatically once back online. Wrapped
+  // in a catch since it can fail on unsupported browsers or when multiple
+  // tabs are open — the app still works fine without it, just without the
+  // offline cache.
+  enableIndexedDbPersistence(db).catch((err) => {
+    console.warn('Offline persistence not enabled:', err.code);
+  });
 
   let currentUser = null;
   let currentUserDoc = null;
@@ -895,11 +1126,17 @@
     const num = Number(amount || 0).toLocaleString('en-US', { maximumFractionDigits: 2 });
     return c + ' ' + num;
   }
-  function genInviteCode(){
+  async function genInviteCode(){
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    let code = 'NKH-';
-    for(let i=0;i<5;i++){ code += chars[Math.floor(Math.random()*chars.length)]; }
-    return code;
+    for(let attempt = 0; attempt < 5; attempt++){
+      let code = 'NKH-';
+      for(let i=0;i<5;i++){ code += chars[Math.floor(Math.random()*chars.length)]; }
+      const q = query(collection(db, 'groups'), where('inviteCode', '==', code));
+      const snap = await getDocs(q);
+      if(snap.empty) return code;
+    }
+    // Vanishingly unlikely to ever reach here, but guarantees uniqueness regardless.
+    return 'NKH-' + Date.now().toString(36).toUpperCase().slice(-5);
   }
   function shuffleArray(arr){
     for(let i = arr.length - 1; i > 0; i--){
@@ -1092,6 +1329,13 @@
       errEl.classList.add('show');
       return;
     }
+    const lowerNames = names.map(n => n.toLowerCase());
+    const dupeName = lowerNames.find((n, i) => lowerNames.indexOf(n) !== i);
+    if(dupeName){
+      errEl.textContent = 'Two members can\'t share the same name — it makes the Wheel and ledger ambiguous. Add a last name or nickname to tell them apart.';
+      errEl.classList.add('show');
+      return;
+    }
 
     const orderMode = document.querySelector('input[name="orderMode"]:checked').value;
     const orderedNames = orderMode === 'random' ? shuffleArray([...names]) : names;
@@ -1103,10 +1347,11 @@
         contributionAmount: parseFloat($('contributionAmount').value),
         currency: $('currency').value,
         frequency: $('frequency').value,
-        inviteCode: genInviteCode(),
+        inviteCode: await genInviteCode(),
         currentRound: 1,
         cycleNumber: 1,
         createdBy: currentUser.uid,
+        treasurers: [currentUser.uid],
         createdAt: serverTimestamp(),
         status: 'active'
       });
@@ -1281,13 +1526,25 @@
     }
     currentGroup = groupSnap.data();
 
+    // Migrate legacy circles (created before multi-treasurer support) to
+    // have a real treasurers array, seeded with the original creator.
+    if(!Array.isArray(currentGroup.treasurers) && currentGroup.createdBy === currentUser.uid){
+      try {
+        await updateDoc(doc(db, 'groups', currentGroupId), { treasurers: [currentGroup.createdBy] });
+        currentGroup.treasurers = [currentGroup.createdBy];
+      } catch(err){ /* non-fatal — isTreasurer() still falls back to createdBy */ }
+    }
+
     screen('screen-app');
     renderHeader();
     renderProfile();
     subscribeToMembers();
     subscribeToTransactions();
-    subscribeToLoans();
-    subscribeToConstitution();
+    // Loans and Constitution aren't needed for the very first screen shown
+    // (Dashboard) — subscribed lazily, the first time their tab/view is
+    // actually opened, so app startup only needs 2 listeners instead of 4.
+    loansSubscribed = false;
+    constitutionSubscribed = false;
 
     const archived = currentGroup.status === 'archived';
     $('navContribute').style.display = (isTreasurer() && !archived) ? 'flex' : 'none';
@@ -1298,7 +1555,13 @@
   // circle" — derived from the group's own createdBy field rather than a
   // stored per-user role, so it stays correct across multiple circles.
   function isTreasurer(){
-    return !!(currentGroup && currentUser && currentGroup.createdBy === currentUser.uid);
+    if(!currentGroup || !currentUser) return false;
+    if(Array.isArray(currentGroup.treasurers)){
+      return currentGroup.treasurers.includes(currentUser.uid);
+    }
+    // Legacy circles created before multi-treasurer support — fall back to
+    // the original creator until the self-heal in loadUserAndGroup runs.
+    return currentGroup.createdBy === currentUser.uid;
   }
 
   // Blocks any write action on an archived circle, even if reached through
@@ -1335,8 +1598,76 @@
       $('dangerZoneText').textContent = archived
         ? 'This circle is currently archived. Reopening it lets everyone record contributions, payouts, and loans again.'
         : 'Archiving closes this circle for everyone. Its full history stays intact and viewable, but no new contributions, payouts, or loans can be recorded.';
+
+      renderTreasurers();
     }
   }
+
+  // ---------- TREASURER MANAGEMENT ----------
+  function renderTreasurers(){
+    const listEl = $('treasurersList');
+    const addSection = $('addTreasurerSection');
+    if(!listEl || !currentGroup) return;
+
+    const treasurerUids = Array.isArray(currentGroup.treasurers) ? currentGroup.treasurers : [currentGroup.createdBy];
+
+    listEl.innerHTML = treasurerUids.map(uid => {
+      const member = currentMembers.find(m => m.uid === uid);
+      const name = uid === currentUser.uid ? `${member ? member.name : currentUserDoc.name} (you)` : (member ? member.name : 'Treasurer');
+      const canRemove = treasurerUids.length > 1;
+      return `
+        <div class="treasurer-item">
+          <div class="ti-badge"><svg viewBox="0 0 24 24"><path d="M12 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M4 21c0-3.3 3.6-6 8-6s8 2.7 8 6"/></svg></div>
+          <div class="ti-info">
+            <div class="ti-name">${escapeHtml(name)}</div>
+            <div class="ti-meta">${uid === currentGroup.createdBy ? 'Original creator' : 'Co-treasurer'}</div>
+          </div>
+          ${canRemove ? `<button class="ti-remove" onclick="removeTreasurer('${uid}')">Remove</button>` : ''}
+        </div>
+      `;
+    }).join('');
+
+    const eligible = currentMembers.filter(m => m.uid && !treasurerUids.includes(m.uid));
+    const canAddMore = treasurerUids.length < 2;
+    addSection.classList.toggle('hidden', !canAddMore || eligible.length === 0);
+    if(canAddMore && eligible.length > 0){
+      $('newTreasurerSelect').innerHTML = eligible.map(m => `<option value="${m.uid}">${escapeHtml(m.name)}</option>`).join('');
+    }
+  }
+
+  window.addCoTreasurer = async function(){
+    const uid = $('newTreasurerSelect').value;
+    if(!uid) return;
+    try {
+      await updateDoc(doc(db, 'groups', currentGroupId), { treasurers: arrayUnion(uid) });
+      if(!Array.isArray(currentGroup.treasurers)){ currentGroup.treasurers = [currentGroup.createdBy]; }
+      currentGroup.treasurers.push(uid);
+      renderTreasurers();
+      showToast('Co-treasurer added.');
+    } catch(err){
+      showToast('Could not add co-treasurer. Try again.');
+    }
+  };
+
+  window.removeTreasurer = async function(uid){
+    const treasurerUids = Array.isArray(currentGroup.treasurers) ? currentGroup.treasurers : [currentGroup.createdBy];
+    if(treasurerUids.length <= 1){
+      showToast('A circle must always have at least one treasurer.');
+      return;
+    }
+    if(!confirm('Remove this person as treasurer? They can still view everything, just not record new activity.')) return;
+    try {
+      await updateDoc(doc(db, 'groups', currentGroupId), { treasurers: arrayRemove(uid) });
+      currentGroup.treasurers = treasurerUids.filter(t => t !== uid);
+      renderTreasurers();
+      renderHeader();
+      $('navContribute').style.display = isTreasurer() ? 'flex' : 'none';
+      showToast('Treasurer removed.');
+      if(uid === currentUser.uid){ showView('dashboard'); }
+    } catch(err){
+      showToast('Could not remove treasurer. Try again.');
+    }
+  };
 
   // ---------- CIRCLE SWITCHER ----------
   window.openSwitcher = async function(){
@@ -1370,6 +1701,61 @@
   window.closeSwitcher = function(){
     $('switcherDrawer').classList.remove('open');
     $('switcherBackdrop').classList.remove('open');
+  };
+
+  // ---------- MEMBER DETAIL DRAWER ----------
+  window.openMemberDetail = function(memberId){
+    const member = currentMembers.find(m => m.id === memberId);
+    if(!member) return;
+    if(!loansSubscribed){ subscribeToLoans(); }
+
+    const pot = (currentGroup.contributionAmount || 0) * currentMembers.length;
+    const contributed = member.totalContributed || 0;
+    const received = member.hasReceivedPayout ? pot : 0;
+    const net = received - contributed;
+    const netClass = net > 0 ? 'positive' : (net < 0 ? 'negative' : 'zero');
+    const netSign = net > 0 ? '+' : '';
+
+    const myTx = currentTransactions.filter(t => t.memberId === memberId);
+    const myLoans = currentLoans.filter(l => l.memberId === memberId);
+
+    $('memberDetailName').textContent = member.name;
+    $('memberDetailBody').innerHTML = `
+      <div class="summary-grid" style="margin-top:16px;">
+        <div class="summary-card">
+          <div class="label">Position</div>
+          <div class="value">#${member.position}</div>
+        </div>
+        <div class="summary-card gold">
+          <div class="label">Status</div>
+          <div class="value" style="font-size:0.95rem;">${member.hasReceivedPayout ? 'Paid Out' : 'Waiting'}</div>
+        </div>
+      </div>
+      <div class="money-row" style="margin-bottom:20px;">
+        <div class="mr-info">
+          <div class="mr-name">Paid in ${fmtMoney(contributed)} · Received ${fmtMoney(received)}</div>
+        </div>
+        <div>
+          <span class="mr-net-label">Net</span>
+          <div class="mr-net ${netClass}">${netSign}${fmtMoney(net)}</div>
+        </div>
+      </div>
+      ${myLoans.length > 0 ? `
+        <div class="section-label">Loans</div>
+        ${myLoans.map(l => `<div class="loan-card"><div class="loan-top"><div class="loan-meta">${fmtMoney(l.amount)} at ${l.feeRate}% fee</div><span class="loan-status ${l.status}">${l.status === 'active' ? 'Active' : 'Repaid'}</span></div><div class="loan-balance">Balance: ${fmtMoney(l.balance)}</div></div>`).join('')}
+      ` : ''}
+      <div class="section-label" style="margin-top:20px;">Transaction History</div>
+      <div class="ledger-card">
+        ${myTx.length === 0 ? emptyState('No transactions from this member yet.') : myTx.map(txRow).join('')}
+      </div>
+    `;
+    $('memberDetailDrawer').classList.add('open');
+    $('memberDetailBackdrop').classList.add('open');
+  };
+
+  window.closeMemberDetail = function(){
+    $('memberDetailDrawer').classList.remove('open');
+    $('memberDetailBackdrop').classList.remove('open');
   };
 
   window.switchToGroup = async function(groupId){
@@ -1438,6 +1824,37 @@
     }
   };
 
+  window.leaveCircle = async function(){
+    const treasurerUids = Array.isArray(currentGroup.treasurers) ? currentGroup.treasurers : [currentGroup.createdBy];
+    const isSoleTreasurer = isTreasurer() && treasurerUids.length === 1;
+    if(isSoleTreasurer){
+      showToast('Add a co-treasurer before leaving — a circle can\'t be left without at least one treasurer.');
+      return;
+    }
+    if(!confirm(`Leave "${currentGroup.name}"? You'll lose your position in the payout order, though the circle's history stays intact for everyone else.`)) return;
+
+    try {
+      const myMember = currentMembers.find(m => m.uid === currentUser.uid);
+      if(myMember){
+        await updateDoc(doc(db, 'groups', currentGroupId, 'members', myMember.id), { uid: null });
+      }
+      if(treasurerUids.includes(currentUser.uid)){
+        await updateDoc(doc(db, 'groups', currentGroupId), { treasurers: arrayRemove(currentUser.uid) });
+      }
+      const remainingGroupIds = (currentUserDoc.groupIds || []).filter(id => id !== currentGroupId);
+      await updateDoc(doc(db, 'users', currentUser.uid), {
+        groupIds: remainingGroupIds,
+        activeGroupId: remainingGroupIds[0] || null
+      });
+      showToast('You\'ve left the circle.');
+      currentUserDoc.groupIds = remainingGroupIds;
+      currentUserDoc.activeGroupId = remainingGroupIds[0] || null;
+      await loadUserAndGroup();
+    } catch(err){
+      showToast('Could not leave circle. Try again.');
+    }
+  };
+
   // ---------- SHARE VIA WHATSAPP ----------
   window.shareViaWhatsApp = function(){
     if(!currentGroup){ return; }
@@ -1456,6 +1873,25 @@
     }
     msg += `%0ASent from Bank Nkhonde`;
     window.open(`https://wa.me/?text=${msg}`, '_blank');
+  };
+
+  window.shareInviteViaWhatsApp = function(){
+    if(!currentGroup){ return; }
+    let msg = `You're invited to join *${currentGroup.name}* on Bank Nkhonde! 🎉%0A%0A`;
+    msg += `It's a ${encodeURIComponent(fmtMoney(currentGroup.contributionAmount))} ${currentGroup.frequency.toLowerCase()} savings circle.%0A%0A`;
+    msg += `Invite code: *${currentGroup.inviteCode}*%0A%0A`;
+    msg += `Open the app, tap "Join with a code", and enter it to get started.`;
+    window.open(`https://wa.me/?text=${msg}`, '_blank');
+  };
+
+  window.requestPositionSwap = function(){
+    const me = currentMembers.find(m => m.uid === currentUser.uid);
+    if(!me || me.hasReceivedPayout) return;
+    let msg = `Hi, this is ${encodeURIComponent(me.name)} from *${encodeURIComponent(currentGroup.name)}*.%0A%0A`;
+    msg += `I'd like to request moving up in the payout order due to an emergency. My current position is #${me.position}.%0A%0A`;
+    msg += `Could we discuss? Thank you.`;
+    window.open(`https://wa.me/?text=${msg}`, '_blank');
+    showToast('Opened WhatsApp — send this to your treasurer.');
   };
 
   // ---------- CSV EXPORT ----------
@@ -1515,6 +1951,8 @@
       renderDashboardStats();
       renderContributeView();
       renderMoneyTable();
+      renderNudgeBanner();
+      if(isTreasurer()){ renderTreasurers(); }
     });
   }
 
@@ -1526,6 +1964,7 @@
       renderLedger();
       renderRecentActivity();
       renderUpcoming();
+      renderNudgeBanner();
     });
   }
 
@@ -1578,13 +2017,20 @@
       container.innerHTML = emptyState('No members yet.');
       return;
     }
+    const searchEl = $('memberSearchInput');
+    const searchTerm = searchEl ? searchEl.value.trim().toLowerCase() : '';
+    let anyVisible = false;
+
     container.innerHTML = currentMembers.map((m, i) => {
+      const matches = !searchTerm || m.name.toLowerCase().includes(searchTerm);
+      if(matches) anyVisible = true;
       let posClass = 'upcoming', badgeClass = 'upcoming', badgeText = 'Upcoming';
       if(m.hasReceivedPayout){ posClass = 'paid'; badgeClass = 'paid'; badgeText = 'Paid Out'; }
       if(i === currentIdx){ posClass = 'current'; badgeClass = 'current'; badgeText = 'Current Turn'; }
       const safeName = escapeHtml(m.name).replace(/'/g, "\\'");
       const canMoveUp = !m.hasReceivedPayout && i > 0 && !currentMembers[i-1].hasReceivedPayout;
       const canMoveDown = !m.hasReceivedPayout && i < currentMembers.length - 1 && !currentMembers[i+1].hasReceivedPayout;
+      const rowStyle = matches ? '' : 'style="display:none;"';
       const actions = treasurer ? `
         <div class="member-actions">
           ${!m.hasReceivedPayout ? `
@@ -1600,18 +2046,20 @@
           </button>
           ${!m.hasReceivedPayout ? `<button class="danger" onclick="removeMember('${m.id}','${safeName}')" aria-label="Remove ${escapeHtml(m.name)}"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>` : ''}
         </div>
-      ` : `<div class="member-badge ${badgeClass}">${badgeText}</div>`;
+      ` : (m.uid === currentUser.uid && !m.hasReceivedPayout && i > 0)
+          ? `<button class="btn-text" style="padding:6px 10px; font-size:0.74rem;" onclick="requestPositionSwap()">Request to move up</button>`
+          : `<div class="member-badge ${badgeClass}">${badgeText}</div>`;
       return `
-        <div class="member-item">
+        <div class="member-item" ${rowStyle}>
           <div class="member-pos ${posClass}">${m.position}</div>
-          <div class="member-info">
+          <div class="member-info clickable" onclick="openMemberDetail('${m.id}')">
             <div class="name">${escapeHtml(m.name)}</div>
             <div class="status">Contributed ${fmtMoney(m.totalContributed)}</div>
           </div>
           ${actions}
         </div>
       `;
-    }).join('');
+    }).join('') + (anyVisible ? '' : `<p style="text-align:center; color:var(--ink-soft); font-size:0.88rem; padding:20px 0;">No members match "${escapeHtml(searchTerm)}".</p>`);
   }
 
   // ---------- MEMBER MANAGEMENT (treasurer) ----------
@@ -1620,6 +2068,11 @@
     const input = $('newMemberName');
     const name = input.value.trim();
     if(!name){ showToast('Enter a name first.'); return; }
+    const dupe = currentMembers.some(m => m.name.toLowerCase() === name.toLowerCase());
+    if(dupe){
+      showToast(`${name} is already in this circle — add a last name or nickname to tell them apart.`);
+      return;
+    }
     try {
       await addDoc(collection(db, 'groups', currentGroupId, 'members'), {
         name, position: currentMembers.length + 1, uid: null,
@@ -1636,8 +2089,14 @@
     if(blockIfArchived()) return;
     const newName = prompt('Edit member name:', currentName);
     if(!newName || !newName.trim() || newName.trim() === currentName) return;
+    const trimmed = newName.trim();
+    const dupe = currentMembers.some(m => m.id !== memberId && m.name.toLowerCase() === trimmed.toLowerCase());
+    if(dupe){
+      showToast(`${trimmed} is already in this circle — pick a different name.`);
+      return;
+    }
     try {
-      await updateDoc(doc(db, 'groups', currentGroupId, 'members', memberId), { name: newName.trim() });
+      await updateDoc(doc(db, 'groups', currentGroupId, 'members', memberId), { name: trimmed });
       showToast('Name updated');
     } catch(err){
       showToast('Could not update name.');
@@ -1723,7 +2182,17 @@
       container.innerHTML = emptyState('No transactions recorded yet.');
       return;
     }
-    container.innerHTML = currentTransactions.map(txRow).join('');
+    const searchEl = $('ledgerSearchInput');
+    const searchTerm = searchEl ? searchEl.value.trim().toLowerCase() : '';
+    const filtered = searchTerm
+      ? currentTransactions.filter(t => (t.memberName || '').toLowerCase().includes(searchTerm))
+      : currentTransactions;
+
+    if(filtered.length === 0){
+      container.innerHTML = `<p style="text-align:center; color:var(--ink-soft); font-size:0.88rem; padding:20px 0;">No transactions match "${escapeHtml(searchTerm)}".</p>`;
+      return;
+    }
+    container.innerHTML = filtered.map(txRow).join('');
   }
   function renderRecentActivity(){
     const container = $('recentActivityList');
@@ -1733,6 +2202,83 @@
       return;
     }
     container.innerHTML = recent.map(txRow).join('');
+  }
+
+  // ---------- NUDGE BANNER ----------
+  // Surfaces the same contribution-date estimate used in Upcoming, but
+  // proactively on the Dashboard — only for treasurers, only when it's
+  // actually close (within 2 days) or overdue, and only if not everyone
+  // still active has already paid this round.
+  function renderNudgeBanner(){
+    const banner = $('nudgeBanner');
+    if(!banner) return;
+    if(!currentGroup || currentGroup.status === 'archived' || currentMembers.length === 0){
+      banner.classList.add('hidden');
+      return;
+    }
+
+    const freqDays = { Weekly: 7, Fortnightly: 14, Monthly: 30 };
+    const days = freqDays[currentGroup.frequency] || 14;
+    let baseDate = null;
+    if(currentTransactions.length > 0 && currentTransactions[0].date && currentTransactions[0].date.toDate){
+      baseDate = currentTransactions[0].date.toDate();
+    } else if(currentGroup.createdAt && currentGroup.createdAt.toDate){
+      baseDate = currentGroup.createdAt.toDate();
+    }
+    if(!baseDate){ banner.classList.add('hidden'); return; }
+
+    const round = currentGroup.currentRound || 1;
+    const paidThisRound = new Set(
+      currentTransactions.filter(t => t.type === 'contribution' && t.round === round).map(t => t.memberId)
+    );
+    const dueDate = new Date(baseDate.getTime() + days * 24 * 60 * 60 * 1000);
+    const daysDiff = Math.round((dueDate - new Date()) / (24 * 60 * 60 * 1000));
+    const currentIdx = currentMembers.findIndex(m => !m.hasReceivedPayout);
+
+    if(isTreasurer()){
+      const allPaid = currentMembers.every(m => m.hasReceivedPayout || paidThisRound.has(m.id));
+      const unpaid = currentMembers.filter(m => !m.hasReceivedPayout);
+      if(unpaid.length === 0 || allPaid || daysDiff > 2){
+        banner.classList.add('hidden');
+        return;
+      }
+      const text = daysDiff < 0
+        ? `Contributions are overdue by ${Math.abs(daysDiff)} day${Math.abs(daysDiff) === 1 ? '' : 's'}.`
+        : daysDiff === 0
+          ? 'Contributions are due today.'
+          : `Contributions due in ${daysDiff} day${daysDiff === 1 ? '' : 's'}.`;
+      banner.classList.remove('hidden');
+      banner.classList.toggle('urgent', daysDiff < 0);
+      banner.innerHTML = `<span class="nb-text">${text}</span><button class="nb-btn" onclick="sendReminderWhatsApp()">Send Reminder</button>`;
+      return;
+    }
+
+    // Member-facing nudge — informational only, no recording action available to them.
+    const me = currentMembers.find(m => m.uid === currentUser.uid);
+    if(!me){ banner.classList.add('hidden'); return; }
+
+    if(me.hasReceivedPayout){
+      banner.classList.add('hidden');
+      return;
+    }
+    if(currentMembers[currentIdx] && currentMembers[currentIdx].id === me.id){
+      banner.classList.remove('hidden');
+      banner.classList.remove('urgent');
+      banner.innerHTML = `<span class="nb-text">🎉 It's your turn this round — your treasurer will record your payout once contributions are in.</span>`;
+      return;
+    }
+    if(paidThisRound.has(me.id) || daysDiff > 2){
+      banner.classList.add('hidden');
+      return;
+    }
+    const memberText = daysDiff < 0
+      ? `Your contribution is overdue by ${Math.abs(daysDiff)} day${Math.abs(daysDiff) === 1 ? '' : 's'}.`
+      : daysDiff === 0
+        ? 'Your contribution is due today.'
+        : `Your contribution is due in ${daysDiff} day${daysDiff === 1 ? '' : 's'}.`;
+    banner.classList.remove('hidden');
+    banner.classList.toggle('urgent', daysDiff < 0);
+    banner.innerHTML = `<span class="nb-text">${memberText}</span>`;
   }
 
   // ---------- UPCOMING (calendar-style timeline) ----------
@@ -1817,11 +2363,12 @@
   function txRow(tx){
     const isPayout = tx.type === 'payout';
     const dateStr = tx.date && tx.date.toDate ? tx.date.toDate().toLocaleDateString('en-GB', { day:'numeric', month:'short' }) : '';
+    const recordedByStr = tx.recordedBy ? ` · by ${escapeHtml(tx.recordedBy)}` : '';
     return `
       <div class="ledger-item">
         <div class="ledger-left">
           <div class="who">${escapeHtml(tx.memberName)}</div>
-          <div class="meta">${isPayout ? 'Received payout' : 'Contributed'} · Round ${tx.round} · ${dateStr}</div>
+          <div class="meta">${isPayout ? 'Received payout' : 'Contributed'} · Round ${tx.round} · ${dateStr}${recordedByStr}</div>
         </div>
         <div class="ledger-amount ${isPayout ? 'out' : 'in'}">${isPayout ? '−' : '+'}${fmtMoney(tx.amount)}</div>
       </div>
@@ -1894,7 +2441,7 @@
       await addDoc(collection(db, 'groups', currentGroupId, 'transactions'), {
         memberId, memberName, amount: currentGroup.contributionAmount,
         type: 'contribution', round: currentGroup.currentRound || 1,
-        date: serverTimestamp()
+        date: serverTimestamp(), recordedBy: currentUserDoc.name || 'Unknown'
       });
       await updateDoc(doc(db, 'groups', currentGroupId, 'members', memberId), {
         totalContributed: increment(currentGroup.contributionAmount)
@@ -1912,7 +2459,7 @@
       await addDoc(collection(db, 'groups', currentGroupId, 'transactions'), {
         memberId, memberName, amount: pot,
         type: 'payout', round: currentGroup.currentRound || 1,
-        date: serverTimestamp()
+        date: serverTimestamp(), recordedBy: currentUserDoc.name || 'Unknown'
       });
       await updateDoc(doc(db, 'groups', currentGroupId, 'members', memberId), {
         hasReceivedPayout: true
@@ -1951,9 +2498,11 @@
   // ---------- LOANS ----------
   let currentLoans = [];
   let unsubLoans = null;
+  let loansSubscribed = false;
 
   function subscribeToLoans(){
     if(unsubLoans) unsubLoans();
+    loansSubscribed = true;
     const q = query(collection(db, 'groups', currentGroupId, 'loans'), orderBy('issuedDate', 'desc'));
     unsubLoans = onSnapshot(q, (snap) => {
       currentLoans = snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -1981,11 +2530,12 @@
           <div class="loan-top">
             <div>
               <div class="loan-name">${escapeHtml(loan.memberName)}</div>
-              <div class="loan-meta">Issued ${fmtMoney(loan.amount)} at ${loan.feeRate}% fee · Due ${dueStr || '—'}</div>
+              <div class="loan-meta">Issued ${fmtMoney(loan.amount)} at ${loan.feeRate}% fee · Due ${dueStr || '—'}${loan.issuedBy ? ` · by ${escapeHtml(loan.issuedBy)}` : ''}</div>
             </div>
             <span class="loan-status ${statusClass}">${statusText}</span>
           </div>
           <div class="loan-balance">Balance: ${fmtMoney(loan.balance)}</div>
+          ${loan.status === 'repaid' && loan.repaidBy ? `<div class="loan-meta" style="margin-top:4px;">Repaid, recorded by ${escapeHtml(loan.repaidBy)}</div>` : ''}
           ${treasurer && loan.status === 'active' ? `
             <div class="loan-actions">
               <button class="btn btn-gold" onclick="recordLoanRepayment('${loan.id}', ${loan.balance})">Record Full Repayment</button>
@@ -2025,7 +2575,7 @@
       const netClass = net > 0 ? 'positive' : (net < 0 ? 'negative' : 'zero');
       const netSign = net > 0 ? '+' : '';
       return `
-        <div class="money-row">
+        <div class="money-row clickable" onclick="openMemberDetail('${m.id}')">
           <div class="mr-pos">${m.position}</div>
           <div class="mr-info">
             <div class="mr-name">${escapeHtml(m.name)}</div>
@@ -2077,7 +2627,7 @@
         await addDoc(collection(db, 'groups', currentGroupId, 'loans'), {
           memberId, memberName: member.name, amount, feeRate,
           balance: totalOwed, dueDate, status: 'active',
-          issuedDate: serverTimestamp()
+          issuedDate: serverTimestamp(), issuedBy: currentUserDoc.name || 'Unknown'
         });
         e.target.reset();
         $('loanFee').value = 10;
@@ -2094,7 +2644,7 @@
     if(!confirm(`Mark this loan as fully repaid (${fmtMoney(balance)})?`)) return;
     try {
       await updateDoc(doc(db, 'groups', currentGroupId, 'loans', loanId), {
-        balance: 0, status: 'repaid'
+        balance: 0, status: 'repaid', repaidBy: currentUserDoc.name || 'Unknown'
       });
       showToast('Loan marked as repaid');
     } catch(err){
@@ -2105,9 +2655,11 @@
   // ---------- CONSTITUTION ----------
   let currentConstitution = [];
   let unsubConstitution = null;
+  let constitutionSubscribed = false;
 
   function subscribeToConstitution(){
     if(unsubConstitution) unsubConstitution();
+    constitutionSubscribed = true;
     const q = query(collection(db, 'groups', currentGroupId, 'constitution'), orderBy('createdAt', 'desc'));
     unsubConstitution = onSnapshot(q, (snap) => {
       currentConstitution = snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -2175,6 +2727,12 @@
     const nav = document.querySelector(`.nav-item[data-view="${viewName}"]`);
     if(nav) nav.classList.add('active');
     window.scrollTo(0,0);
+
+    // Lazy-subscribe: Loans and Constitution data isn't needed until their
+    // screens are actually opened, so the app doesn't pay for 4 Firestore
+    // listeners on every load — just the 2 the Dashboard actually needs.
+    if(viewName === 'ledger' && !loansSubscribed){ subscribeToLoans(); }
+    if(viewName === 'profile' && !constitutionSubscribed){ subscribeToConstitution(); }
   };
 
   // ---------- HELPERS ----------
