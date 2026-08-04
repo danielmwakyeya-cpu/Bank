@@ -523,11 +523,23 @@
     box-shadow:0 2px 4px rgba(0,0,0,0.3), 0 20px 40px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06);
   }
   .wheel-svg{width:100%; max-width:280px; margin:0 auto; display:block;}
+  .wheel-stage{position:relative; width:100%; max-width:280px; margin:0 auto; aspect-ratio:1/1;}
+  .wheel-stage .wheel-rim-layer, .wheel-stage .wheel-svg{
+    position:absolute; inset:0; width:100%; height:100%; max-width:none; margin:0;
+  }
+  .wheel-rim-layer{pointer-events:none;}
+  .wheel-stage::after{
+    content:''; position:absolute; inset:0; border-radius:50%; pointer-events:none;
+    background:linear-gradient(115deg, rgba(255,255,255,0.22) 0%, transparent 30%, transparent 70%, rgba(255,255,255,0.1) 100%);
+    mix-blend-mode:overlay;
+  }
   .wheel-dot{transition:transform 0.15s cubic-bezier(.4,0,.2,1); transform-box:fill-box; transform-origin:center;}
   .wheel-dot:hover{transform:scale(1.12);}
   .wheel-dot:active{transform:scale(0.94);}
-  .wheel-center-label{font-family:var(--serif); font-size:0.85rem; font-weight:600; fill:var(--text-heading);}
-  .wheel-center-sub{font-family:var(--sans); font-size:0.6rem; fill:var(--ink-soft);}
+  .wheel-center-label{font-family:var(--serif); font-size:0.85rem; font-weight:600; fill:#4A3410;}
+  .wheel-center-sub{font-family:var(--sans); font-size:0.6rem; fill:#6b4f14;}
+  [data-theme="dark"] .wheel-center-label{fill:#3A2A0C;}
+  [data-theme="dark"] .wheel-center-sub{fill:#4A3410;}
   .wheel-status{margin-top:16px;}
   .wheel-status .whose-turn{font-family:var(--serif); font-size:1.2rem; color:var(--text-heading); font-weight:600; text-shadow:0 1px 2px rgba(15,46,34,0.06);}
   [data-theme="dark"] .wheel-status .whose-turn{text-shadow:0 1px 3px rgba(0,0,0,0.3);}
@@ -598,13 +610,21 @@
   }
   .member-pos{
     width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-    font-family:var(--mono); font-weight:600; font-size:0.85rem; flex-shrink:0;
+    font-family:var(--mono); font-weight:600; font-size:0.85rem; flex-shrink:0; position:relative;
     box-shadow:inset 0 1px 0 rgba(255,255,255,0.3), 0 2px 5px rgba(15,46,34,0.2);
   }
   .member-pos.paid{background:linear-gradient(160deg, var(--gold-light) 0%, var(--gold) 65%, #8A6420 100%); color:var(--forest-deep);}
   .member-pos.current{
     background:linear-gradient(160deg, var(--forest-soft) 0%, var(--forest) 60%, var(--forest-deep) 100%);
     color:var(--gold-light); box-shadow:inset 0 1px 0 rgba(255,255,255,0.25), 0 0 0 4px rgba(201,154,63,0.25), 0 2px 8px rgba(15,46,34,0.3);
+  }
+  /* decorative medallion ring — static layer sitting behind the dynamic initials/number,
+     echoing the wheel's rim treatment on the one badge that represents "whose turn" */
+  .member-pos.current::before{
+    content:''; position:absolute; inset:-7px; border-radius:50%; z-index:-1;
+    background:conic-gradient(from 0deg, var(--gold-light), var(--gold) 25%, #8A6420 50%, var(--gold) 75%, var(--gold-light) 100%);
+    -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+    mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
   }
   .member-pos.upcoming{background:var(--parchment-deep); color:var(--ink-soft); border:1.5px solid rgba(27,67,50,0.15); box-shadow:inset 0 1px 2px rgba(15,46,34,0.06);}
   .member-info{flex:1;}
@@ -1117,7 +1137,60 @@
   <div id="view-dashboard" class="view active">
     <div id="nudgeBanner" class="nudge-banner hidden"></div>
     <div class="wheel-card">
-      <svg id="wheelSvg" class="wheel-svg" viewBox="0 0 280 280"></svg>
+      <div class="wheel-stage">
+        <svg class="wheel-rim-layer" viewBox="0 0 280 280" aria-hidden="true">
+          <defs>
+            <linearGradient id="rimMetal" x1="0.1" y1="0" x2="0.9" y2="1">
+              <stop offset="0%" stop-color="var(--gold-light)"/>
+              <stop offset="30%" stop-color="var(--gold)"/>
+              <stop offset="65%" stop-color="#8A6420"/>
+              <stop offset="100%" stop-color="#5C4110"/>
+            </linearGradient>
+            <radialGradient id="rimHub" cx="35%" cy="28%" r="80%">
+              <stop offset="0%" stop-color="#FFF8E2"/>
+              <stop offset="35%" stop-color="var(--gold-light)"/>
+              <stop offset="70%" stop-color="var(--gold)"/>
+              <stop offset="100%" stop-color="#6E4E17"/>
+            </radialGradient>
+            <radialGradient id="rimRivet" cx="35%" cy="28%" r="80%">
+              <stop offset="0%" stop-color="#FFF3D0"/>
+              <stop offset="60%" stop-color="var(--gold)"/>
+              <stop offset="100%" stop-color="#7A5A1E"/>
+            </radialGradient>
+            <filter id="rimHubShadow" x="-60%" y="-60%" width="220%" height="220%">
+              <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000000" flood-opacity="0.35"/>
+            </filter>
+            <filter id="rimRivetShadow" x="-100%" y="-100%" width="300%" height="300%">
+              <feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#000000" flood-opacity="0.4"/>
+            </filter>
+          </defs>
+          <circle cx="140" cy="140" r="128" fill="none" stroke="url(#rimMetal)" stroke-width="7" opacity="0.9"/>
+          <circle cx="140" cy="140" r="124.5" fill="none" stroke="#FFF3D0" stroke-width="1" opacity="0.45"/>
+          <circle cx="140.0" cy="12.0" r="3.2" fill="url(#rimRivet)" filter="url(#rimRivetShadow)"/><circle cx="139.2" cy="11.2" r="0.9" fill="#FFFFFF" opacity="0.85"/>
+          <circle cx="189.0" cy="21.7" r="3.2" fill="url(#rimRivet)" filter="url(#rimRivetShadow)"/><circle cx="188.2" cy="20.9" r="0.9" fill="#FFFFFF" opacity="0.85"/>
+          <circle cx="230.5" cy="49.5" r="3.2" fill="url(#rimRivet)" filter="url(#rimRivetShadow)"/><circle cx="229.7" cy="48.7" r="0.9" fill="#FFFFFF" opacity="0.85"/>
+          <circle cx="258.3" cy="91.0" r="3.2" fill="url(#rimRivet)" filter="url(#rimRivetShadow)"/><circle cx="257.5" cy="90.2" r="0.9" fill="#FFFFFF" opacity="0.85"/>
+          <circle cx="268.0" cy="140.0" r="3.2" fill="url(#rimRivet)" filter="url(#rimRivetShadow)"/><circle cx="267.2" cy="139.2" r="0.9" fill="#FFFFFF" opacity="0.85"/>
+          <circle cx="258.3" cy="189.0" r="3.2" fill="url(#rimRivet)" filter="url(#rimRivetShadow)"/><circle cx="257.5" cy="188.2" r="0.9" fill="#FFFFFF" opacity="0.85"/>
+          <circle cx="230.5" cy="230.5" r="3.2" fill="url(#rimRivet)" filter="url(#rimRivetShadow)"/><circle cx="229.7" cy="229.7" r="0.9" fill="#FFFFFF" opacity="0.85"/>
+          <circle cx="189.0" cy="258.3" r="3.2" fill="url(#rimRivet)" filter="url(#rimRivetShadow)"/><circle cx="188.2" cy="257.5" r="0.9" fill="#FFFFFF" opacity="0.85"/>
+          <circle cx="140.0" cy="268.0" r="3.2" fill="url(#rimRivet)" filter="url(#rimRivetShadow)"/><circle cx="139.2" cy="267.2" r="0.9" fill="#FFFFFF" opacity="0.85"/>
+          <circle cx="91.0" cy="258.3" r="3.2" fill="url(#rimRivet)" filter="url(#rimRivetShadow)"/><circle cx="90.2" cy="257.5" r="0.9" fill="#FFFFFF" opacity="0.85"/>
+          <circle cx="49.5" cy="230.5" r="3.2" fill="url(#rimRivet)" filter="url(#rimRivetShadow)"/><circle cx="48.7" cy="229.7" r="0.9" fill="#FFFFFF" opacity="0.85"/>
+          <circle cx="21.7" cy="189.0" r="3.2" fill="url(#rimRivet)" filter="url(#rimRivetShadow)"/><circle cx="20.9" cy="188.2" r="0.9" fill="#FFFFFF" opacity="0.85"/>
+          <circle cx="12.0" cy="140.0" r="3.2" fill="url(#rimRivet)" filter="url(#rimRivetShadow)"/><circle cx="11.2" cy="139.2" r="0.9" fill="#FFFFFF" opacity="0.85"/>
+          <circle cx="21.7" cy="91.0" r="3.2" fill="url(#rimRivet)" filter="url(#rimRivetShadow)"/><circle cx="20.9" cy="90.2" r="0.9" fill="#FFFFFF" opacity="0.85"/>
+          <circle cx="49.5" cy="49.5" r="3.2" fill="url(#rimRivet)" filter="url(#rimRivetShadow)"/><circle cx="48.7" cy="48.7" r="0.9" fill="#FFFFFF" opacity="0.85"/>
+          <circle cx="91.0" cy="21.7" r="3.2" fill="url(#rimRivet)" filter="url(#rimRivetShadow)"/><circle cx="90.2" cy="20.9" r="0.9" fill="#FFFFFF" opacity="0.85"/>
+          <g filter="url(#rimHubShadow)">
+            <circle cx="140" cy="140" r="44" fill="url(#rimHub)"/>
+            <circle cx="140" cy="140" r="44" fill="none" stroke="#FFF3D0" stroke-width="1" opacity="0.6"/>
+          </g>
+          <ellipse cx="126" cy="126" rx="12" ry="7" fill="#FFFFFF" opacity="0.5"/>
+        </svg>
+        <svg id="wheelSvg" class="wheel-svg" viewBox="0 0 280 280"></svg>
+      </div>
+
       <div class="wheel-status">
         <div class="turn-label">Currently Receiving</div>
         <div class="whose-turn" id="currentTurnName">—</div>
@@ -2775,7 +2848,6 @@
         <stop offset="100%" stop-color="var(--gold)"/>
       </linearGradient>
     </defs>`;
-    html += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(27,67,50,0.1)" stroke-width="2"/>`;
     html += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="url(#tubeGrad)" stroke-width="2.5" stroke-dasharray="1 11" opacity="0.7"/>`;
 
     currentMembers.forEach((m, i) => {
