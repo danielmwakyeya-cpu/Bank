@@ -2,7 +2,7 @@
 // IMPORTANT: bump CACHE_VERSION every time you redeploy index.html (or any
 // cached asset). If you don't, returning users will keep seeing the old
 // cached version until it happens to expire.
-const CACHE_VERSION = 'v2';
+const CACHE_VERSION = 'v4';
 const CACHE_NAME = `bank-nkhonde-${CACHE_VERSION}`;
 
 const PRECACHE_URLS = [
