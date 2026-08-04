@@ -35,7 +35,7 @@
     --parchment:#F4F0E4; --parchment-deep:#EAE3D2;
     --ink:#1F2B24; --ink-soft:#3D4941;
     --rust:#A6432E; --rust-soft:#C97A67;
-    --card-bg:#FFFFFF; --text-heading:#0F2E22;
+    --card-bg:#FFFFFF; --text-heading:var(--forest-deep);
     --serif:'Spectral', serif; --sans:'IBM Plex Sans', sans-serif; --mono:'IBM Plex Mono', monospace;
     --signature:'Dancing Script', cursive;
   }
@@ -47,16 +47,38 @@
     --rust:#D97757; --rust-soft:#C97A67;
     --card-bg:#212A25; --text-heading:#F0DFAE;
   }
-  /* ---------- ACCENT THEMES ---------- */
-  /* The forest-green base and overall structure stay constant — only the
-     accent color (used for badges, "paid" states, highlights, buttons)
-     changes, so the app's identity holds regardless of which is picked. */
-  [data-accent="rose"]{ --gold:#C97A67; --gold-light:#DFA394; --gold-pale:#F3E0DA; }
-  [data-theme="dark"][data-accent="rose"]{ --gold:#D98F7D; --gold-light:#E8B3A5; --gold-pale:#3A2620; }
-  [data-accent="teal"]{ --gold:#2F8F87; --gold-light:#5CB3AB; --gold-pale:#DCEEEC; }
-  [data-theme="dark"][data-accent="teal"]{ --gold:#4FB3AA; --gold-light:#7ED0C7; --gold-pale:#1A3330; }
-  [data-accent="violet"]{ --gold:#7C5CBF; --gold-light:#A78BFA; --gold-pale:#E8E1F7; }
-  [data-theme="dark"][data-accent="violet"]{ --gold:#9B81D6; --gold-light:#C4B2EC; --gold-pale:#2A2340; }
+  /* ---------- FULL THEMES ---------- */
+  /* Each theme now changes BOTH the primary color (header, buttons, nav —
+     the colors that actually dominate the app's look) AND the accent color
+     together, as a matched pair. Picking a theme should visibly transform
+     the app, not just tint a few small badges. */
+  [data-accent="rose"]{
+    --forest:#6B2E3D; --forest-deep:#4A1F2A; --forest-soft:#8C4557;
+    --gold:#C97A67; --gold-light:#DFA394; --gold-pale:#F3E0DA;
+  }
+  [data-theme="dark"][data-accent="rose"]{
+    --forest:#8C4557; --forest-deep:#5C2E3A; --forest-soft:#A85F70;
+    --gold:#D98F7D; --gold-light:#E8B3A5; --gold-pale:#3A2620;
+    --text-heading:#F3DAD3;
+  }
+  [data-accent="teal"]{
+    --forest:#134C52; --forest-deep:#0C3438; --forest-soft:#1F6169;
+    --gold:#2F8F87; --gold-light:#5CB3AB; --gold-pale:#DCEEEC;
+  }
+  [data-theme="dark"][data-accent="teal"]{
+    --forest:#1F6169; --forest-deep:#0C3438; --forest-soft:#2C7A82;
+    --gold:#4FB3AA; --gold-light:#7ED0C7; --gold-pale:#1A3330;
+    --text-heading:#CFEAE7;
+  }
+  [data-accent="violet"]{
+    --forest:#3D2B56; --forest-deep:#281C3A; --forest-soft:#523B70;
+    --gold:#7C5CBF; --gold-light:#A78BFA; --gold-pale:#E8E1F7;
+  }
+  [data-theme="dark"][data-accent="violet"]{
+    --forest:#523B70; --forest-deep:#332448; --forest-soft:#6B4F8C;
+    --gold:#9B81D6; --gold-light:#C4B2EC; --gold-pale:#2A2340;
+    --text-heading:#DDD2F0;
+  }
   [data-theme="dark"] .empty-state svg{stroke:var(--forest-soft);}
   [data-theme="dark"] .member-badge.current{background:rgba(201,154,63,0.18);}
   [data-theme="dark"] .member-pos.upcoming{background:rgba(255,255,255,0.08); border-color:rgba(237,234,224,0.15);}
@@ -112,7 +134,10 @@
   /* ---------- AUTH SCREENS ---------- */
   .auth-screen{
     min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
-    padding:40px 20px; background:linear-gradient(180deg, var(--forest) 0%, var(--forest-deep) 100%);
+    padding:40px 20px;
+    background:
+      radial-gradient(ellipse 100% 60% at 20% -10%, rgba(255,255,255,0.14) 0%, transparent 55%),
+      linear-gradient(180deg, var(--forest-soft) 0%, var(--forest) 35%, var(--forest-deep) 100%);
     position:relative;
   }
   .auth-card{
@@ -195,11 +220,14 @@
   /* ---------- APP SHELL ---------- */
   .app-shell{min-height:100vh; padding-bottom:88px;}
   .app-header{
-    background:linear-gradient(160deg, var(--forest-soft) 0%, var(--forest) 45%, var(--forest-deep) 100%);
+    background:
+      radial-gradient(ellipse 140% 100% at 15% -20%, rgba(255,255,255,0.22) 0%, transparent 55%),
+      radial-gradient(ellipse 100% 80% at 100% 120%, rgba(0,0,0,0.18) 0%, transparent 60%),
+      linear-gradient(155deg, var(--forest-soft) 0%, var(--forest) 45%, var(--forest-deep) 100%);
     color:var(--parchment); padding:calc(20px + env(safe-area-inset-top)) 20px 24px;
-    border-radius:0 0 24px 24px;
-    box-shadow:0 10px 24px rgba(15,46,34,0.28), inset 0 1px 0 rgba(255,255,255,0.12);
-    position:relative; z-index:1;
+    border-radius:0 0 28px 28px;
+    box-shadow:0 14px 30px rgba(15,46,34,0.32), inset 0 1px 0 rgba(255,255,255,0.15);
+    position:relative; z-index:1; overflow:hidden;
   }
   .app-header-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; gap:10px;}
   .app-header .group-name{
@@ -1102,18 +1130,19 @@
         <div class="acc-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1.3" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1.3" fill="currentColor" stroke="none"/><circle cx="12" cy="15" r="1.3" fill="currentColor" stroke="none"/></svg></div>
         <div>
           <div class="acc-title">Appearance</div>
-          <div class="acc-sub">Accent color &amp; text size</div>
+          <div class="acc-sub">Theme &amp; text size</div>
         </div>
         <svg class="acc-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
       <div class="accordion-body-wrap"><div class="accordion-body-inner"><div class="accordion-body">
-        <p style="font-size:0.82rem; color:var(--ink-soft); margin-bottom:12px;">Pick an accent color. The rest of the app stays the same either way.</p>
+        <p style="font-size:0.82rem; color:var(--ink-soft); margin-bottom:12px;">Pick a theme — changes the header, buttons, and highlights throughout the app.</p>
         <div class="accent-picker">
-          <button class="accent-swatch selected" data-accent="gold" onclick="selectAccent('gold')" style="background:#C99A3F;" aria-label="Gold accent"></button>
-          <button class="accent-swatch" data-accent="rose" onclick="selectAccent('rose')" style="background:#C97A67;" aria-label="Rose accent"></button>
-          <button class="accent-swatch" data-accent="teal" onclick="selectAccent('teal')" style="background:#2F8F87;" aria-label="Teal accent"></button>
-          <button class="accent-swatch" data-accent="violet" onclick="selectAccent('violet')" style="background:#7C5CBF;" aria-label="Violet accent"></button>
+          <button class="accent-swatch selected" data-accent="gold" onclick="previewTheme('gold')" style="background:linear-gradient(135deg, #1B4332 50%, #C99A3F 50%);" aria-label="Forest theme"></button>
+          <button class="accent-swatch" data-accent="rose" onclick="previewTheme('rose')" style="background:linear-gradient(135deg, #6B2E3D 50%, #C97A67 50%);" aria-label="Rose theme"></button>
+          <button class="accent-swatch" data-accent="teal" onclick="previewTheme('teal')" style="background:linear-gradient(135deg, #134C52 50%, #2F8F87 50%);" aria-label="Teal theme"></button>
+          <button class="accent-swatch" data-accent="violet" onclick="previewTheme('violet')" style="background:linear-gradient(135deg, #3D2B56 50%, #7C5CBF 50%);" aria-label="Violet theme"></button>
         </div>
+        <button id="applyThemeBtn" class="btn btn-gold hidden" style="margin-bottom:20px;" onclick="applyPendingTheme()">Apply Theme</button>
         <p style="font-size:0.82rem; color:var(--ink-soft); margin-bottom:12px;">Text size — helpful if small text is hard to read.</p>
         <div class="textsize-picker" style="margin-bottom:0;">
           <button class="textsize-option selected" data-textsize="normal" onclick="selectTextSize('normal')">Normal</button>
@@ -1391,6 +1420,26 @@
   (function initAccent(){
     applyAccent(localStorage.getItem('nkhonde-accent') || 'gold');
   })();
+
+  // Selecting a swatch only marks a pending choice and reveals the Apply
+  // button — nothing about the live app actually changes until Apply is
+  // pressed, so browsing themes never has a surprise side effect.
+  let pendingAccent = null;
+  window.previewTheme = function(accent){
+    pendingAccent = accent;
+    document.querySelectorAll('.accent-swatch').forEach(sw => {
+      sw.classList.toggle('selected', sw.dataset.accent === accent);
+    });
+    const currentActive = document.documentElement.getAttribute('data-accent') || 'gold';
+    const btn = $('applyThemeBtn');
+    if(btn) btn.classList.toggle('hidden', accent === currentActive);
+  };
+  window.applyPendingTheme = function(){
+    if(!pendingAccent) return;
+    selectAccent(pendingAccent);
+    $('applyThemeBtn').classList.add('hidden');
+    showToast('Theme applied!');
+  };
 
   // ---------- TEXT SIZE ----------
   function applyTextSize(size){
